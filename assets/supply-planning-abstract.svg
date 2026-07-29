@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="88 112 1024 500" role="img" aria-labelledby="title desc">
+  <title id="title">头程发货测算推演抽象图</title>
+  <desc id="desc">同一时间轴上，粉色出库柱形向下连续排布，蓝色入库柱形向上集中出现，薰衣草色库存折线贯穿其中，并标出短暂的库存监测窗口。</desc>
+  <rect width="1200" height="750" fill="#121119"/>
+
+  <g fill="none" stroke="#b091f3" stroke-opacity=".19" stroke-width="2">
+    <path d="M88 178H1112"/>
+    <path d="M88 310H1112"/>
+    <path d="M88 442H1112"/>
+    <path d="M88 574H1112"/>
+  </g>
+
+  <rect x="840" y="112" width="124" height="500" fill="#ff735e" fill-opacity=".16"/>
+  <rect x="852" y="112" width="7" height="500" fill="#ff735e"/>
+
+  <g fill="#ff89c2">
+    <rect x="88" y="442" width="30" height="18"/><rect x="120" y="442" width="30" height="22"/>
+    <rect x="152" y="442" width="30" height="16"/><rect x="184" y="442" width="30" height="25"/>
+    <rect x="216" y="442" width="30" height="19"/><rect x="248" y="442" width="30" height="28"/>
+    <rect x="280" y="442" width="30" height="23"/><rect x="312" y="442" width="30" height="18"/>
+    <rect x="344" y="442" width="30" height="31"/><rect x="376" y="442" width="30" height="22"/>
+    <rect x="408" y="442" width="30" height="26"/><rect x="440" y="442" width="30" height="17"/>
+    <rect x="472" y="442" width="30" height="24"/><rect x="504" y="442" width="30" height="33"/>
+    <rect x="536" y="442" width="30" height="21"/><rect x="568" y="442" width="30" height="27"/>
+    <rect x="600" y="442" width="30" height="18"/><rect x="632" y="442" width="30" height="29"/>
+    <rect x="664" y="442" width="30" height="24"/><rect x="696" y="442" width="30" height="34"/>
+    <rect x="728" y="442" width="30" height="20"/><rect x="760" y="442" width="30" height="27"/>
+    <rect x="792" y="442" width="30" height="16"/><rect x="824" y="442" width="30" height="23"/>
+    <rect x="856" y="442" width="30" height="31"/><rect x="888" y="442" width="30" height="26"/>
+    <rect x="920" y="442" width="30" height="19"/><rect x="952" y="442" width="30" height="28"/>
+    <rect x="984" y="442" width="30" height="42"/><rect x="1016" y="442" width="30" height="50"/>
+    <rect x="1048" y="442" width="30" height="38"/><rect x="1080" y="442" width="30" height="45"/>
+  </g>
+
+  <g fill="#5797ff">
+    <rect x="276" y="310" width="26" height="132"/>
+    <rect x="590" y="220" width="26" height="222"/>
+    <rect x="864" y="342" width="32" height="100"/>
+  </g>
+
+  <path d="M88 270 L198 304 L276 330 L302 238 L430 292 L590 330 L616 205 L730 250 L864 296 L896 240 L980 310 L1112 442" fill="none" stroke="#b091f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"/>
+  <path d="M896 240H1112" fill="none" stroke="#b091f3" stroke-dasharray="10 12" stroke-width="6"/>
+  <circle cx="896" cy="240" r="12" fill="#b091f3" stroke="#121119" stroke-width="6"/>
+  <path d="M88 442H1112" fill="none" stroke="#f5f2ff" stroke-opacity=".78" stroke-width="4"/>
+</svg>

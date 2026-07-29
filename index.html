@@ -19,6 +19,14 @@
         --line: rgba(18, 17, 25, 0.18);
       }
 
+      @font-face {
+        font-family: "LXGW WenKai";
+        src: url("assets/fonts/LXGWWenKai-Medium.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
       * {
         box-sizing: border-box;
       }
@@ -31,7 +39,9 @@
         margin: 0;
         background: var(--paper);
         color: var(--ink);
-        font-family: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+        font-family: Inter, "Segoe UI", "LXGW WenKai", "Microsoft YaHei", sans-serif;
+        font-synthesis: weight;
+        font-weight: 800;
       }
 
       a {
@@ -47,12 +57,13 @@
         align-items: center;
         justify-content: space-between;
         padding: 18px 28px;
-        border-bottom: 1px solid var(--line);
-        background: rgba(245, 242, 255, 0.94);
+        border-bottom: 1px solid rgba(176, 145, 243, 0.42);
+        background: var(--ink);
+        color: var(--lavender);
       }
 
       .wordmark {
-        font-size: 14px;
+        font-size: 19px;
         font-weight: 800;
         letter-spacing: 0;
       }
@@ -60,7 +71,7 @@
       .site-nav {
         display: flex;
         gap: 22px;
-        font-size: 13px;
+        font-size: 18px;
         font-weight: 700;
       }
 
@@ -105,8 +116,8 @@
 
       .hero-role {
         max-width: 590px;
-        margin-top: 28px;
-        font-size: 20px;
+        margin-top: 56px;
+        font-size: 21px;
         font-weight: 650;
         line-height: 1.45;
       }
@@ -129,19 +140,24 @@
       }
 
       .video-placeholder p {
-        color: var(--lime);
-        font-size: 14px;
+        color: var(--lavender);
+        font-size: 19px;
         font-weight: 800;
       }
 
       .work,
       .flywheel {
-        padding: 120px 5vw;
+        padding: 64px 5vw;
+      }
+
+      .work {
+        background: var(--ink);
+        color: var(--paper);
       }
 
       .section-heading {
         max-width: 770px;
-        margin-bottom: 52px;
+        margin-bottom: 32px;
       }
 
       .section-heading h2 {
@@ -156,8 +172,8 @@
         gap: 44px;
         align-items: center;
         padding: 28px 0;
-        border-top: 2px solid var(--ink);
-        border-bottom: 2px solid var(--ink);
+        border-top: 2px solid rgba(245, 242, 255, 0.58);
+        border-bottom: 2px solid rgba(245, 242, 255, 0.58);
       }
 
       .project-copy h3 {
@@ -171,6 +187,7 @@
         margin: 24px 0 32px;
         font-size: 18px;
         line-height: 1.55;
+        color: var(--paper);
       }
 
       .project-facts {
@@ -195,16 +212,17 @@
 
       .button-link {
         display: inline-flex;
-        min-height: 48px;
+        min-height: 58px;
         align-items: center;
-        padding: 0 18px;
-        border: 2px solid var(--ink);
-        font-size: 14px;
+        padding: 0 24px;
+        border: 2px solid var(--paper);
+        color: var(--ink);
+        font-size: 19px;
         font-weight: 800;
       }
 
       .button-link.primary {
-        background: var(--lime);
+        background: var(--lavender);
       }
 
       .button-link:hover {
@@ -214,15 +232,15 @@
       .project-preview {
         display: block;
         overflow: hidden;
-        border: 2px solid var(--ink);
+        border: 1px solid rgba(245, 242, 255, 0.4);
         background: var(--ink);
       }
 
       .project-preview img {
         display: block;
         width: 100%;
-        aspect-ratio: 16 / 10;
-        object-fit: cover;
+        aspect-ratio: 2.048 / 1;
+        object-fit: contain;
         object-position: center;
         transition: transform 220ms ease;
       }
@@ -239,99 +257,103 @@
       }
 
       .flywheel {
-        background: var(--ink);
-        color: var(--paper);
-      }
-
-      .flywheel .section-index,
-      .flywheel .section-heading h2 {
-        color: var(--paper);
+        background: var(--lavender);
+        color: var(--ink);
       }
 
       .flywheel-stage {
         display: grid;
-        grid-template-columns: minmax(340px, 0.8fr) minmax(430px, 1.2fr);
-        gap: 60px;
+        grid-template-columns: minmax(320px, 0.76fr) minmax(0, 1.24fr);
+        gap: clamp(48px, 6vw, 110px);
         align-items: center;
       }
 
+      .flywheel-copy {
+        display: grid;
+        gap: 34px;
+        max-width: 470px;
+      }
+
       .flywheel-note {
-        max-width: 410px;
-        color: #d9d3e6;
+        max-width: 470px;
+        color: var(--ink);
         font-size: 19px;
         line-height: 1.55;
       }
 
-      .flywheel-ring {
-        position: relative;
-        width: min(100%, 630px);
-        aspect-ratio: 1;
-        margin-inline: auto;
-        border: 2px solid var(--lime);
-        border-radius: 50%;
-      }
-
-      .flywheel-center {
-        position: absolute;
-        inset: 31%;
-        display: grid;
-        place-items: center;
-        border-radius: 50%;
-        background: var(--lavender);
-        color: var(--ink);
-        font-size: clamp(20px, 2.3vw, 34px);
-        font-weight: 850;
-        line-height: 1.02;
-        text-align: center;
-      }
-
-      .flywheel-node {
-        position: absolute;
-        width: 160px;
-        color: var(--paper);
-        font-size: 14px;
-        font-weight: 750;
-        line-height: 1.25;
-        text-align: center;
-      }
-
-      .flywheel-node::before {
+      .flywheel-graphic {
         display: block;
-        width: 13px;
-        height: 13px;
-        margin: 0 auto 8px;
-        border-radius: 50%;
-        background: var(--coral);
-        content: "";
+        width: min(100%, 760px);
+        margin: -52px auto;
+        overflow: visible;
       }
 
-      .node-1 { top: -28px; left: calc(50% - 80px); }
-      .node-2 { top: 18%; right: -45px; }
-      .node-3 { right: -54px; bottom: 16%; }
-      .node-4 { bottom: -28px; left: calc(50% - 80px); }
-      .node-5 { bottom: 16%; left: -54px; }
+      .flywheel-graphic .arc {
+        fill: none;
+        stroke: var(--ink);
+        stroke-width: 15;
+        stroke-linecap: round;
+      }
+
+      .flywheel-graphic .leader {
+        fill: none;
+        stroke: var(--ink);
+        stroke-width: 10;
+        stroke-linecap: round;
+      }
+
+      .flywheel-graphic .arrow {
+        fill: none;
+        stroke: var(--ink);
+        stroke-width: 15;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .flywheel-graphic .node {
+        fill: var(--coral);
+        stroke: var(--ink);
+        stroke-width: 5;
+      }
+
+      .flywheel-graphic .label,
+      .flywheel-graphic .center-text {
+        font-family: "LXGW WenKai", "Microsoft YaHei", sans-serif;
+        font-synthesis: weight;
+        font-weight: 800;
+      }
+
+      .flywheel-graphic .label {
+        fill: var(--ink);
+        font-size: 20px;
+      }
+
+      .flywheel-graphic .center-text {
+        fill: var(--paper);
+        font-size: 31px;
+      }
 
       .flywheel-outcomes {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 2px;
-        margin-top: 72px;
-        background: rgba(245, 242, 255, 0.28);
+        gap: 18px;
+        margin: 0;
       }
 
       .outcome {
-        padding: 26px;
-        background: var(--ink);
+        padding: 16px 0 0;
+        border-top: 2px solid var(--ink);
       }
 
       .outcome h3 {
         margin-bottom: 8px;
-        color: var(--lime);
-        font-size: 15px;
+        color: var(--ink);
+        font-size: 20px;
       }
 
       .outcome p {
-        color: #d9d3e6;
+        color: var(--ink);
+        font-size: 21px;
         line-height: 1.5;
       }
 
@@ -341,13 +363,14 @@
         justify-content: space-between;
         gap: 24px;
         padding: 24px 5vw;
-        background: var(--lime);
-        font-size: 14px;
+        background: var(--ink);
+        color: var(--lavender);
+        font-size: 19px;
         font-weight: 800;
       }
 
       .site-footer a {
-        border-bottom: 2px solid var(--ink);
+        border-bottom: 2px solid var(--lavender);
       }
 
       @media (max-width: 780px) {
@@ -390,21 +413,127 @@
           order: -1;
         }
 
-        .flywheel-ring {
-          width: min(86vw, 500px);
+        .flywheel-copy {
+          max-width: none;
         }
 
-        .flywheel-node {
-          width: 110px;
-          font-size: 11px;
+        .flywheel-graphic {
+          margin: 0 auto;
+          width: min(100%, 640px);
         }
-
-        .node-2,
-        .node-3 { right: -30px; }
-        .node-5 { left: -30px; }
 
         .flywheel-outcomes {
           grid-template-columns: 1fr;
+        }
+      }
+
+      @media (min-width: 781px) {
+        :root { --page-header: 64px; --page-footer: 69px; }
+
+        .site-header {
+          min-height: var(--page-header);
+          padding: 16px 28px;
+        }
+
+        #work,
+        #flywheel { scroll-margin-top: var(--page-header); }
+
+        .hero,
+        .work {
+          min-height: calc(100vh - var(--page-header));
+          padding: 6vh 5vw;
+        }
+
+        .hero {
+          display: grid;
+          grid-template-columns: minmax(0, 0.94fr) minmax(620px, 1.06fr);
+          align-items: center;
+          gap: clamp(56px, 7vw, 132px);
+        }
+
+        .hero-copy { max-width: 720px; }
+
+        h1 {
+          max-width: 720px;
+          font-size: clamp(72px, 6.4vw, 112px);
+        }
+
+        .hero-role {
+          max-width: 610px;
+          margin-top: 56px;
+        }
+
+        .video-placeholder {
+          width: 100%;
+          min-height: 0;
+          aspect-ratio: 16 / 9;
+          margin-top: 0;
+          padding: 34px;
+        }
+
+        .work {
+          display: grid;
+          grid-template-rows: auto 1fr;
+          align-content: center;
+          gap: 42px;
+        }
+
+        .work .section-heading {
+          max-width: 900px;
+          margin: 0;
+        }
+
+        .work .section-heading h2 {
+          font-size: clamp(48px, 4.35vw, 76px);
+          line-height: 1.05;
+        }
+
+        .featured-project {
+          grid-template-columns: minmax(390px, 0.76fr) minmax(650px, 1.24fr);
+          align-items: center;
+          gap: clamp(50px, 6vw, 112px);
+          padding: 32px 0;
+        }
+
+        .project-copy h3 { font-size: clamp(44px, 4vw, 68px); }
+
+        .project-summary {
+          max-width: 500px;
+          margin: 26px 0 34px;
+          font-size: 19px;
+        }
+
+        .flywheel {
+          min-height: calc(100vh - var(--page-header) - var(--page-footer));
+          padding: 5vh 5vw 4vh;
+        }
+
+        .flywheel .section-heading {
+          max-width: 840px;
+          margin-bottom: 18px;
+        }
+
+        .flywheel .section-heading h2 {
+          font-size: clamp(46px, 4.1vw, 72px);
+          line-height: 1.02;
+        }
+
+        .flywheel-stage {
+          grid-template-columns: minmax(330px, 0.72fr) minmax(600px, 1.28fr);
+          gap: clamp(36px, 5vw, 94px);
+        }
+
+        .flywheel-copy { gap: 30px; }
+        .flywheel-note { font-size: 18px; }
+
+        .flywheel-graphic {
+          width: min(100%, 700px);
+          margin: -36px auto -26px;
+        }
+
+        .site-footer {
+          min-height: var(--page-footer);
+          padding: 18px 5vw;
         }
       }
     </style>
@@ -413,8 +542,8 @@
     <header class="site-header">
       <a class="wordmark" href="#top">GERALD LEUNG</a>
       <nav class="site-nav" aria-label="页面导航">
-        <a href="#work">Work</a>
-        <a href="#flywheel">Flywheel</a>
+        <a href="#work">项目</a>
+        <a href="#flywheel">价值飞轮</a>
         <a href="https://github.com/geraldleung95" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
     </header>
@@ -422,42 +551,31 @@
     <main id="top">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow">AI Tools Builder · Workflow Automation · FDE</p>
           <h1 id="hero-title">I'm Gerald Leung.</h1>
-          <p class="hero-role">把复杂业务流程、AI 能力与可用工具连接起来，形成能够进入真实场景的工作方式。</p>
+          <p class="hero-role">从真实业务问题出发，结合 AI 构建能在场景中运行的工具与工作流。</p>
         </div>
-        <section class="video-placeholder" aria-label="60 秒自我介绍视频占位">
-          <h2>60-second<br />introduction</h2>
-          <p>Video coming soon</p>
+        <section class="video-placeholder" aria-label="60 秒个人故事动画短片占位">
+          <h2>60 秒<br />个人故事</h2>
+          <p>动画短片制作中</p>
         </section>
       </section>
 
       <section class="work" id="work" aria-labelledby="work-title">
         <div class="section-heading">
-          <p class="section-index">03 / Selected work</p>
-          <h2 id="work-title">从业务约束到可解释的决策工具。</h2>
+          <h2 id="work-title">把头程发货从经验判断，变成可推演的决策。</h2>
         </div>
 
         <article class="featured-project">
           <div class="project-copy">
-            <p class="project-kicker">Featured case / Supply planning</p>
             <h3>头程发货<br />测算推演</h3>
-            <p class="project-summary">将销售预测、库存、在途、物流时效和区域仓分配逻辑放进同一条可交互的发货决策链路。</p>
-            <div class="project-facts" aria-label="项目标签">
-              <span>FDE</span>
-              <span>Supply planning</span>
-              <span>Interactive workflow</span>
-              <span>Desktop demo</span>
-            </div>
+            <p class="project-summary">将销售预测、库存、在途、物流时效与区域仓分配放入同一个交互工作台，让每次发货决策都能看到约束、选择与结果。</p>
             <div class="project-actions">
-              <a class="button-link primary" href="demos/supply-planning/forecast_main.html" target="_blank" rel="noreferrer">打开交互 Demo</a>
-              <a class="button-link" href="https://github.com/geraldleung95" target="_blank" rel="noreferrer">查看 GitHub</a>
+              <a class="button-link primary" href="demos/supply-planning/forecast_main.html" target="_blank" rel="noreferrer">进入推演工作台</a>
             </div>
           </div>
           <a class="project-preview" href="demos/supply-planning/forecast_main.html" target="_blank" rel="noreferrer">
             <figure>
-              <img src="assets/supply-planning-preview.png" alt="头程发货测算推演的交互工作台预览" />
-              <figcaption>Desktop interactive demo · Open in a new tab</figcaption>
+              <img src="assets/supply-planning-abstract.svg" alt="头程发货测算推演的库存与发货决策图" />
             </figure>
           </a>
         </article>
@@ -465,31 +583,62 @@
 
       <section class="flywheel" id="flywheel" aria-labelledby="flywheel-title">
         <div class="section-heading">
-          <p class="section-index">04 / Value flywheel</p>
           <h2 id="flywheel-title">让一次交付，成为下一次增长的起点。</h2>
         </div>
 
         <div class="flywheel-stage">
-          <p class="flywheel-note">我的工作不止于完成一个页面或一次分析。目标是将真实场景中的判断、工具和反馈沉淀为组织可复用的能力，同时推动个人能力持续升级。</p>
-          <div class="flywheel-ring" role="img" aria-label="个人与组织价值增长飞轮">
-            <span class="flywheel-node node-1">识别真实<br />业务阻力</span>
-            <span class="flywheel-node node-2">定义决策<br />与约束</span>
-            <span class="flywheel-node node-3">构建工具<br />和工作流</span>
-            <span class="flywheel-node node-4">验证、沉淀<br />与扩散</span>
-            <span class="flywheel-node node-5">进入真实<br />场景使用</span>
-            <div class="flywheel-center">个人 × 组织<br />价值增长</div>
+          <div class="flywheel-copy">
+            <p class="flywheel-note">我的目标不止于完成一次交付，而是让真实业务中的判断、工具与反馈沉淀为可复用的能力。</p>
+            <div class="flywheel-outcomes">
+              <article class="outcome">
+                <h3>对个人</h3>
+                <p>积累业务理解、交付能力与可复用的方法判断。</p>
+              </article>
+              <article class="outcome">
+                <h3>对组织</h3>
+                <p>沉淀更稳定的决策、交付质量与可复制的工作能力。</p>
+              </article>
+            </div>
           </div>
-        </div>
 
-        <div class="flywheel-outcomes">
-          <article class="outcome">
-            <h3>对个人</h3>
-            <p>积累业务理解、交付能力与可复用的方法判断。</p>
-          </article>
-          <article class="outcome">
-            <h3>对组织</h3>
-            <p>沉淀更稳定的决策、交付质量与可复制的工作能力。</p>
-          </article>
+          <svg class="flywheel-graphic" viewBox="0 0 960 760" role="img" aria-labelledby="flywheel-svg-title flywheel-svg-description">
+            <title id="flywheel-svg-title">个人与组织价值增长飞轮</title>
+            <desc id="flywheel-svg-description">从识别真实业务阻力开始，依次定义决策与约束、构建工具和工作流、进入真实场景使用、验证沉淀与扩散，形成顺时针循环。</desc>
+            <path class="arc" d="M 534 152 A 240 240 0 0 1 712 284" />
+            <path class="arc" d="M 736 330 A 240 240 0 0 1 647 565" />
+            <path class="arc" d="M 622 596 A 240 240 0 0 1 379 596" />
+            <path class="arc" d="M 353 565 A 240 240 0 0 1 264 330" />
+            <path class="arc" d="M 288 284 A 240 240 0 0 1 466 152" />
+            <path class="arrow" d="M 683 265 L 712 284 L 715 249" />
+            <path class="arrow" d="M 658 532 L 647 565 L 682 560" />
+            <path class="arrow" d="M 414 596 L 379 596 L 396 627" />
+            <path class="arrow" d="M 274 363 L 264 330 L 240 355" />
+            <path class="arrow" d="M 439 174 L 466 152 L 434 138" />
+
+            <path class="leader" d="M 500 140 L 500 76" />
+            <path class="leader" d="M 737 309 L 810 256 L 848 256" />
+            <path class="leader" d="M 642 590 L 700 656 L 750 656" />
+            <path class="leader" d="M 263 309 L 190 256 L 120 256" />
+            <path class="leader" d="M 358 590 L 300 656 L 210 656" />
+
+            <circle class="node" cx="500" cy="150" r="11" />
+            <circle class="node" cx="728" cy="316" r="11" />
+            <circle class="node" cx="641" cy="584" r="11" />
+            <circle class="node" cx="359" cy="584" r="11" />
+            <circle class="node" cx="272" cy="316" r="11" />
+
+            <circle cx="500" cy="390" r="94" fill="#121119" />
+            <text class="center-text" x="500" y="380" text-anchor="middle">
+              <tspan x="500" dy="0">个人 × 组织</tspan>
+              <tspan x="500" dy="38">价值增长</tspan>
+            </text>
+
+            <text class="label" x="500" y="36" text-anchor="middle"><tspan x="500" dy="0">识别真实</tspan><tspan x="500" dy="25">业务阻力</tspan></text>
+            <text class="label" x="862" y="231" text-anchor="start"><tspan x="862" dy="0">定义决策</tspan><tspan x="862" dy="25">与约束</tspan></text>
+            <text class="label" x="764" y="632" text-anchor="start"><tspan x="764" dy="0">构建工具</tspan><tspan x="764" dy="25">和工作流</tspan></text>
+            <text class="label" x="106" y="232" text-anchor="end"><tspan x="106" dy="0">验证、沉淀</tspan><tspan x="106" dy="25">与扩散</tspan></text>
+            <text class="label" x="196" y="632" text-anchor="end"><tspan x="196" dy="0">进入真实</tspan><tspan x="196" dy="25">场景使用</tspan></text>
+          </svg>
         </div>
       </section>
     </main>
