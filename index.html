@@ -122,6 +122,10 @@
         line-height: 1.45;
       }
 
+      .hero-role-line {
+        display: block;
+      }
+
       .story-video {
         position: relative;
         aspect-ratio: 16 / 9;
@@ -501,6 +505,12 @@
           min-height: 660px;
         }
 
+        .hero-role {
+          display: grid;
+          gap: 8px;
+          margin-top: 72px;
+        }
+
         .story-video {
           margin-top: 52px;
         }
@@ -561,7 +571,12 @@
         }
 
         .flywheel-copy {
+          gap: 42px;
           max-width: none;
+        }
+
+        .outcome h3 {
+          margin-bottom: 12px;
         }
 
         .flywheel-graphic {
@@ -667,14 +682,27 @@
         .flywheel-stage {
           grid-template-columns: minmax(330px, 0.72fr) minmax(600px, 1.28fr);
           gap: clamp(36px, 5vw, 94px);
+          min-height: calc(100vh - var(--page-header) - var(--page-footer) - 9vh);
         }
 
-        .flywheel-copy { gap: 30px; }
+        .flywheel-copy { gap: 52px; }
         .flywheel-note { font-size: 18px; }
+
+        .flywheel-copy .section-heading {
+          margin-bottom: 0;
+        }
+
+        .flywheel-copy .section-heading h2 {
+          line-height: 1.12;
+        }
+
+        .outcome h3 {
+          margin-bottom: 14px;
+        }
 
         .flywheel-graphic {
           width: min(100%, 700px);
-          margin: -36px auto -26px;
+          margin: 0 auto;
         }
 
         .site-footer {
@@ -685,9 +713,26 @@
 
       @media (min-width: 1280px) {
         .hero-role {
+          display: grid;
+          gap: 12px;
           max-width: 660px;
-          font-size: 18px;
+          margin-top: 96px;
+          font-size: 36px;
+          line-height: 1.34;
           white-space: nowrap;
+        }
+
+        .flywheel-stage {
+          grid-template-columns: minmax(620px, 0.82fr) minmax(600px, 1.18fr);
+        }
+
+        .flywheel-copy,
+        .flywheel-note {
+          max-width: 660px;
+        }
+
+        .flywheel-graphic {
+          transform: translateX(72px);
         }
       }
     </style>
@@ -706,7 +751,7 @@
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
           <h1 id="hero-title">I'm Gerald Leung.</h1>
-          <p class="hero-role">从真实业务问题出发，结合 AI 构建能在场景中运行的工具与工作流。</p>
+          <p class="hero-role"><span class="hero-role-line">业务现场为阵，AI 与我为伍；</span><span class="hero-role-line">以真实需求破题，以落地交付作答。</span></p>
         </div>
         <section class="story-video" aria-label="90 秒个人故事动画短片">
           <video
@@ -751,21 +796,20 @@
       </section>
 
       <section class="flywheel" id="flywheel" aria-labelledby="flywheel-title">
-        <div class="section-heading">
-          <h2 id="flywheel-title">让一次交付，成为下一次增长的起点。</h2>
-        </div>
-
         <div class="flywheel-stage">
           <div class="flywheel-copy">
-            <p class="flywheel-note">我的目标不止于完成一次交付，而是让真实业务中的判断、工具与反馈沉淀为可复用的能力。</p>
+            <div class="section-heading">
+              <h2 id="flywheel-title">以交付破当下之题，<br />以沉淀蓄未来之势。</h2>
+            </div>
+            <p class="flywheel-note">真正有价值的交付，不止解决当下问题，还会将实战中的判断、方法与工具，沉淀为下一次可以直接调用的能力。</p>
             <div class="flywheel-outcomes">
               <article class="outcome">
                 <h3>对个人</h3>
-                <p>积累业务理解、交付能力与可复用的方法判断。</p>
+                <p>实战经验持续沉淀，<br />问题解法不断迭代。</p>
               </article>
               <article class="outcome">
                 <h3>对组织</h3>
-                <p>沉淀更稳定的决策、交付质量与可复制的工作能力。</p>
+                <p>经验转为组织资产，<br />成果支撑持续交付。</p>
               </article>
             </div>
           </div>
