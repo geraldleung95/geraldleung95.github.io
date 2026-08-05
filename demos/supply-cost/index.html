@@ -7,13 +7,16 @@
     <title>供应链降本逻辑拆解 | Gerald Leung</title>
     <style>
       :root {
-        --lavender: rgb(176, 145, 243);
         --ink: #121119;
         --panel: #17151f;
         --paper: #f5f2ff;
-        --lime: #cef26a;
+        --muted: rgba(245, 242, 255, 0.72);
+        --line: rgba(245, 242, 255, 0.22);
+        --lavender: rgb(176, 145, 243);
         --pink: #ff89c2;
+        --lime: #cef26a;
         --blue: #5797ff;
+        --orange: #ffa95c;
       }
 
       @font-face {
@@ -28,66 +31,602 @@
 
       body {
         margin: 0;
-        min-height: 100vh;
         background: var(--ink);
         color: var(--paper);
         font-family: Inter, "Segoe UI", "LXGW WenKai", "Microsoft YaHei", sans-serif;
         font-weight: 800;
+        letter-spacing: 0;
       }
 
       .page {
         min-height: 100vh;
-        display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        padding: 58px 64px;
+        background:
+          linear-gradient(90deg, rgba(176, 145, 243, 0.08), transparent 30%, rgba(206, 242, 106, 0.05) 100%),
+          var(--ink);
       }
 
-      .panel {
-        position: relative;
-        min-height: calc(100vh - 116px);
-        border: 1px solid rgba(245, 242, 255, 0.32);
-        background: var(--panel);
-        overflow: hidden;
+      .topbar {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 64px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(18, 17, 25, 0.92);
       }
 
-      .panel:first-child {
-        display: none;
-      }
-
-      .panel-title {
-        position: absolute;
-        top: 26px;
-        left: 30px;
-        margin: 0;
-        font-size: 32px;
+      .brand {
+        color: var(--lavender);
+        font-size: 21px;
         line-height: 1;
+      }
+
+      .nav {
+        display: flex;
+        gap: 28px;
+        color: var(--paper);
+        font-size: 15px;
+      }
+
+      .hero {
+        min-height: calc(100vh - 70px);
+        display: grid;
+        grid-template-columns: minmax(680px, 0.95fr) minmax(760px, 1.15fr);
+        gap: 36px;
+        align-items: center;
+        padding: 62px 64px 48px;
+      }
+
+      .intro {
+        max-width: 700px;
+      }
+
+      h1 {
+        margin: 0 0 26px;
+        font-size: 72px;
+        line-height: 1.02;
         letter-spacing: 0;
       }
 
-      .graph {
+      .definition {
+        margin: 0;
+        max-width: 700px;
+        color: var(--paper);
+        font-size: 26px;
+        line-height: 1.48;
+      }
+
+      .anchors {
+        display: grid;
+        gap: 18px;
+        margin-top: 34px;
+      }
+
+      .anchor {
+        display: grid;
+        grid-template-columns: 14px minmax(0, 1fr);
+        gap: 14px;
+        align-items: start;
+        padding-bottom: 18px;
+        color: var(--muted);
+        font-size: 19px;
+        line-height: 1.45;
+      }
+
+      .anchor::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        margin-top: 10px;
+        border-radius: 50%;
+        background: var(--lime);
+        box-shadow: 0 0 0 5px rgba(206, 242, 106, 0.12);
+      }
+
+      .outcomes {
+        margin-top: 34px;
+        padding: 24px 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .outcomes h2 {
+        margin: 0 0 20px;
+        color: var(--lavender);
+        font-size: 24px;
+        line-height: 1.12;
+        letter-spacing: 0;
+      }
+
+      .result-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .metric {
+        min-height: 116px;
+        display: grid;
+        align-content: center;
+        gap: 12px;
+        padding: 18px 20px;
+        border: 1px solid rgba(245, 242, 255, 0.20);
+        border-radius: 6px;
+        background: rgba(245, 242, 255, 0.035);
+      }
+
+      .metric.actual {
+        border-color: rgba(206, 242, 106, 0.56);
+        background: rgba(206, 242, 106, 0.08);
+      }
+
+      .metric-label {
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1;
+      }
+
+      .metric-value {
+        color: var(--paper);
+        font-family: Inter, "Segoe UI", sans-serif;
+        font-size: 42px;
+        line-height: 0.94;
+        letter-spacing: 0;
+        white-space: nowrap;
+      }
+
+      .metric.actual .metric-value {
+        color: var(--lime);
+        font-size: 64px;
+      }
+
+      .visual {
+        position: relative;
+        min-height: 748px;
+        border: 1px solid rgba(245, 242, 255, 0.28);
+        background:
+          linear-gradient(180deg, rgba(245, 242, 255, 0.045), rgba(245, 242, 255, 0.01)),
+          var(--panel);
+        overflow: hidden;
+      }
+
+      .visual-title {
+        position: absolute;
+        left: 38px;
+        top: 34px;
+        display: flex;
+        align-items: center;
+        color: var(--paper);
+        font-size: 22px;
+      }
+
+      .visual-title::before {
+        content: none;
+      }
+
+      .diagram {
         position: absolute;
         left: 50%;
         top: 54%;
+        width: min(94%, 1040px);
+        height: 632px;
         transform: translate(-50%, -50%);
       }
 
-      .graph.vertical {
-        width: 830px;
-        height: 660px;
+      .active-modal {
+        display: none;
       }
 
-      .graph.horizontal {
-        width: 830px;
-        height: 660px;
+      .active-modal h3 {
+        margin: 0 0 14px;
+        color: var(--paper);
+        font-size: 20px;
+        line-height: 1.1;
       }
 
-      .links {
+      .modal-metrics {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px 14px;
+      }
+
+      .modal-metric {
+        display: grid;
+        gap: 4px;
+      }
+
+      .modal-metric span {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.25;
+      }
+
+      .modal-metric b {
+        color: var(--lime);
+        font-family: Inter, "Segoe UI", sans-serif;
+        font-size: 25px;
+        line-height: 1;
+      }
+
+      .active-modal p {
+        margin: 12px 0 0;
+        color: rgba(245, 242, 255, 0.78);
+        font-size: 14px;
+        line-height: 1.38;
+      }
+
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: rgba(18, 17, 25, 0.86);
+      }
+
+      .full-modal {
+        position: fixed;
+        inset: 92px 112px 64px;
+        z-index: 110;
+        display: grid;
+        grid-template-columns: minmax(0, 1.9fr) minmax(360px, 0.9fr);
+        gap: 34px;
+        padding: 34px;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(245, 242, 255, 0.5);
+        background: var(--ink);
+        box-shadow: 0 34px 95px rgba(0, 0, 0, 0.58);
+      }
+
+      .close-button {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 4;
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        border-radius: 50%;
+        border: 1px solid rgba(245, 242, 255, 0.35);
+        background: rgba(245, 242, 255, 0.08);
+        color: rgba(245, 242, 255, 0.9);
+        font-family: Inter, "Segoe UI", sans-serif;
+        font-size: 28px;
+        line-height: 1;
+        cursor: default;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+      }
+
+      .evidence {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(245, 242, 255, 0.22);
+        background: #17151f;
+      }
+
+      .evidence-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 24px 28px 16px;
+      }
+
+      .evidence-title h2 {
+        margin: 0;
+        font-size: 30px;
+        line-height: 1.05;
+      }
+
+      .legend {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: flex-end;
+        color: rgba(245, 242, 255, 0.68);
+        font-size: 15px;
+      }
+
+      .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .legend i {
+        display: inline-block;
+        width: 24px;
+        height: 10px;
+      }
+
+      .legend i.up { background: var(--lime); }
+      .legend i.down { background: var(--pink); }
+
+      .sea-bg { background: rgb(91, 145, 232); }
+      .fast-land-bg { background: rgb(142, 203, 91); }
+      .express-air-bg { background: rgb(255, 169, 92); }
+
+      .evidence-body {
+        display: grid;
+        grid-template-rows: auto auto 1fr;
+        gap: 16px;
+        padding: 0 30px 30px;
+      }
+
+      .stack-panel {
+        display: grid;
+        gap: 20px;
+        padding: 28px 20px;
+        border: 1px solid rgba(245, 242, 255, 0.24);
+        background: rgba(245, 242, 255, 0.024);
+      }
+
+      .stack-row {
+        display: grid;
+        grid-template-columns: 72px 1fr;
+        gap: 18px;
+        align-items: center;
+      }
+
+      .stack-year {
+        color: rgba(245, 242, 255, 0.82);
+        font-size: 20px;
+        text-align: center;
+      }
+
+      .stack-bar {
+        display: flex;
+        height: 72px;
+        overflow: visible;
+        border: 1px solid rgba(245, 242, 255, 0.24);
+        background: rgba(245, 242, 255, 0.04);
+      }
+
+      .stack-segment {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-width: 0;
+        color: #10131a;
+        font-size: 18px;
+        line-height: 1;
+      }
+
+      .stack-segment.small span {
+        position: absolute;
+        top: 50%;
+        right: 2px;
+        color: #10131a;
+        font-size: 15px;
+        transform: translateY(-50%);
+        white-space: nowrap;
+      }
+
+      .stack-segment.micro-callout span {
+        top: 49px;
+        right: 74px;
+        z-index: 4;
+        font-size: 18px;
+        transform: none;
+      }
+
+      .stack-segment.micro-callout::after {
+        content: "";
+        position: absolute;
+        top: 39px;
+        right: 12px;
+        z-index: 3;
+        width: 62px;
+        height: 2px;
+        background: #10131a;
+        transform: rotate(-22deg);
+        transform-origin: right center;
+      }
+
+      .impact-strip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .impact-card {
+        display: grid;
+        align-content: center;
+        min-height: 92px;
+        padding: 16px 18px;
+        border: 1px solid rgba(245, 242, 255, 0.22);
+        background: rgba(245, 242, 255, 0.03);
+      }
+
+      .impact-card .label {
+        color: rgba(245, 242, 255, 0.64);
+        font-size: 14px;
+      }
+
+      .impact-card .value {
+        margin-top: 8px;
+        color: var(--paper);
+        font-family: Inter, "Segoe UI", sans-serif;
+        font-size: 34px;
+        line-height: 1;
+      }
+
+      .impact-card.result {
+        border-color: rgba(206, 242, 106, 0.48);
+        background: rgba(206, 242, 106, 0.04);
+      }
+
+      .impact-card.result .value {
+        color: var(--lime);
+      }
+
+      .share-table {
+        display: grid;
+        border: 1px solid rgba(245, 242, 255, 0.24);
+      }
+
+      .share-head,
+      .share-row {
+        display: grid;
+        grid-template-columns: 1.16fr 0.9fr 0.9fr 2.65fr 0.88fr;
+        align-items: center;
+      }
+
+      .share-head {
+        min-height: 44px;
+        border-bottom: 1px solid rgba(245, 242, 255, 0.22);
+        color: rgba(245, 242, 255, 0.62);
+        font-size: 13px;
+      }
+
+      .share-head > div,
+      .share-row > div {
+        padding: 0 14px;
+      }
+
+      .share-row {
+        min-height: 74px;
+        border-bottom: 1px solid rgba(245, 242, 255, 0.11);
+      }
+
+      .share-row:last-child {
+        border-bottom: 0;
+      }
+
+      .mode-name,
+      .share-num,
+      .share-value {
+        color: rgba(245, 242, 255, 0.84);
+        font-size: 18px;
+      }
+
+      .share-track {
+        position: relative;
+        height: 30px;
+      }
+
+      .share-track::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 6px;
+        bottom: 6px;
+        width: 1px;
+        background: rgba(245, 242, 255, 0.28);
+      }
+
+      .share-delta {
+        position: absolute;
+        top: 4px;
+        height: 22px;
+      }
+
+      .share-delta.up {
+        left: 50%;
+        width: var(--w);
+        background: rgba(255, 137, 194, 0.78);
+      }
+
+      .share-delta.down {
+        right: 50%;
+        width: var(--w);
+        background: rgba(206, 242, 106, 0.78);
+      }
+
+      .share-value.up { color: var(--pink); }
+      .share-value.down { color: var(--lime); }
+
+      .modal-copy {
+        display: grid;
+        align-content: start;
+        gap: 20px;
+        min-height: 0;
+        overflow: auto;
+        padding-right: 8px;
+      }
+
+      .modal-copy h2 {
+        margin: 0;
+        color: var(--paper);
+        font-size: 34px;
+        line-height: 1;
+      }
+
+      .modal-copy section {
+        padding-top: 18px;
+        border-top: 1px solid rgba(245, 242, 255, 0.18);
+      }
+
+      .modal-copy h3 {
+        margin: 0 0 10px;
+        color: var(--lavender);
+        font-size: 18px;
+        line-height: 1.15;
+      }
+
+      .modal-copy p {
+        margin: 0 0 8px;
+        color: rgba(245, 242, 255, 0.78);
+        font-size: 15px;
+        line-height: 1.48;
+      }
+
+      .logic-graph {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      .logic-full {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .logic-graph > .logic-lines,
+      .logic-graph > .g-node {
+        display: none;
+      }
+
+      .interactive-node {
+        cursor: default;
+        outline: none;
+      }
+
+      .interactive-node[data-modal] {
+        cursor: pointer;
+      }
+
+      .interactive-node[data-modal]:hover .node-box,
+      .interactive-node[data-modal]:focus-visible .node-box {
+        stroke: var(--lime);
+        filter: drop-shadow(0 0 12px rgba(206, 242, 106, 0.42));
+      }
+
+      .node-tooltip {
+        position: fixed;
+        z-index: 90;
+        width: 312px;
+        padding: 13px 15px;
+        border: 1px solid rgba(176, 145, 243, 0.78);
+        background: #211d2d;
+        color: var(--paper);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
+        font-size: 13px;
+        line-height: 1.45;
+        pointer-events: none;
+      }
+
+      .logic-lines {
         position: absolute;
         inset: 0;
         pointer-events: none;
       }
 
-      .links path {
+      .logic-lines path {
         fill: none;
         stroke: var(--lavender);
         stroke-width: 4;
@@ -95,201 +634,1568 @@
         stroke-linejoin: round;
       }
 
-      .links .same-action {
-        stroke-dasharray: 11 10;
-        opacity: 0.92;
+      .logic-lines .same-action {
+        stroke-dasharray: 10 10;
       }
 
-      .node {
+      .g-node {
         position: absolute;
+        width: 154px;
+        min-height: 54px;
         display: grid;
         place-items: center;
-        min-height: 48px;
-        padding: 0 10px;
-        border: 2px solid rgba(245, 242, 255, 0.56);
-        border-radius: 5px;
-        background: rgba(255, 137, 194, 0.82);
+        padding: 0 12px;
+        border: 2px solid rgba(245, 242, 255, 0.58);
+        border-radius: 6px;
+        background: rgba(255, 137, 194, 0.84);
         color: #10131a;
-        font-family: inherit;
-        font-size: 15px;
-        font-weight: 800;
-        line-height: 1.16;
-        text-align: center;
-        letter-spacing: 0;
-        cursor: default;
-      }
-
-      .node.root {
-        background: rgba(255, 137, 194, 0.94);
+        box-shadow: 0 0 14px rgba(245, 242, 255, 0.22);
         font-size: 17px;
+        line-height: 1.18;
+        text-align: center;
       }
 
-      .node.inventory {
-        background: rgba(87, 151, 255, 0.9);
+      .g-node.root {
+        background: rgba(255, 137, 194, 0.94);
+        font-size: 18px;
+      }
+
+      .g-node.inventory {
+        background: rgba(87, 151, 255, 0.92);
         color: var(--paper);
       }
 
-      .node.clickable {
-        box-shadow: 0 0 0 2px rgba(206, 242, 106, 0.34);
+      .g-root { left: 36px; top: 253px; }
+      .g-head { left: 260px; top: 77px; }
+      .g-tail { left: 260px; top: 207px; }
+      .g-ware { left: 260px; top: 337px; }
+      .g-purchase { left: 260px; top: 467px; }
+      .g-mode-structure { left: 500px; top: 37px; }
+      .g-inventory-head { left: 500px; top: 127px; }
+      .g-tail-price { left: 500px; top: 187px; }
+      .g-order-dist { left: 500px; top: 263px; }
+      .g-rent-price { left: 500px; top: 337px; }
+      .g-inventory-ware { left: 500px; top: 427px; }
+      .g-mode-price { left: 730px; top: 17px; }
+      .g-ship-volume { left: 730px; top: 101px; }
+
+      .sections {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        border-top: 1px solid var(--line);
       }
 
-      .node:hover,
-      .node:focus-visible {
+      .band {
+        display: grid;
+        grid-template-columns: 360px minmax(0, 1fr);
+        gap: 58px;
+        padding: 54px 64px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .band h2 {
+        margin: 0;
+        font-size: 38px;
+        line-height: 1.12;
+        letter-spacing: 0;
+      }
+
+      .band-body {
+        display: grid;
+        gap: 28px;
+      }
+
+      .lead {
+        margin: 0;
+        max-width: 980px;
+        color: var(--paper);
+        font-size: 23px;
+        line-height: 1.58;
+      }
+
+      .cost-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .cost-item {
+        min-height: 172px;
+        padding: 20px 18px;
+        border: 1px solid rgba(245, 242, 255, 0.24);
+        border-radius: 6px;
+        background: rgba(245, 242, 255, 0.035);
+      }
+
+      .cost-item h3 {
+        margin: 0 0 14px;
+        color: var(--paper);
+        font-size: 23px;
+        line-height: 1.15;
+      }
+
+      .cost-item p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.55;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        gap: 28px;
+      }
+
+      .note {
+        padding: 26px 28px;
+        border-left: 6px solid var(--blue);
+        background: rgba(87, 151, 255, 0.10);
+      }
+
+      .note h3 {
+        margin: 0 0 14px;
+        font-size: 26px;
+        line-height: 1.16;
+      }
+
+      .note p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 20px;
+        line-height: 1.58;
+      }
+
+      .mapping {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: stretch;
+        gap: 12px;
+      }
+
+      .map-step {
+        min-height: 96px;
+        display: grid;
+        place-items: center;
+        padding: 16px;
+        border: 1px solid rgba(206, 242, 106, 0.38);
+        border-radius: 6px;
+        color: var(--paper);
+        font-size: 20px;
+        text-align: center;
+        line-height: 1.25;
+      }
+
+      .map-step:nth-child(odd) {
+        background: rgba(206, 242, 106, 0.08);
+      }
+
+      @media (max-width: 900px) {
+        .topbar {
+          height: 62px;
+          padding: 0 20px;
+        }
+
+        .nav {
+          gap: 16px;
+          font-size: 13px;
+        }
+
+        .hero,
+        .band {
+          grid-template-columns: 1fr;
+          padding: 40px 20px;
+        }
+
+        h1 {
+          font-size: 48px;
+        }
+
+        .definition {
+          font-size: 21px;
+        }
+
+        .visual {
+          min-height: 460px;
+        }
+
+        .diagram {
+          width: 720px;
+          transform: translate(-50%, -50%) scale(0.45);
+        }
+
+        .cost-grid,
+        .split,
+        .mapping {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      [hidden] { display: none !important; }
+
+      body.modal-open {
+        overflow: hidden;
+      }
+
+      .modal-shell {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+      }
+
+      .modal-shell .modal-overlay {
+        z-index: 100;
+      }
+
+      .modal-shell .full-modal {
+        z-index: 110;
+      }
+
+      .modal-content {
+        display: contents;
+      }
+
+      .g-node {
+        font-family: inherit;
+        border-radius: 5px;
+      }
+
+      button.g-node {
+        appearance: none;
+        border: 2px solid rgba(245, 242, 255, 0.58);
+        cursor: pointer;
+      }
+
+      button.g-node:hover,
+      button.g-node:focus-visible {
         border-color: var(--lime);
         outline: none;
+        box-shadow: 0 0 0 3px rgba(206, 242, 106, 0.22);
       }
 
-      .node:hover::after,
-      .node:focus-visible::after {
-        content: attr(data-tip);
+      .result-strip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .result-card,
+      .result-change {
+        display: grid;
+        align-content: center;
+        min-height: 108px;
+        padding: 18px 20px;
+        border: 1px solid rgba(245, 242, 255, 0.22);
+        background: rgba(245, 242, 255, 0.03);
+      }
+
+      .result-card .year,
+      .result-change .label {
+        color: rgba(245, 242, 255, 0.64);
+        font-size: 15px;
+      }
+
+      .result-card .value,
+      .result-change .value {
+        margin-top: 8px;
+        color: var(--paper);
+        font-family: Inter, "Segoe UI", sans-serif;
+        font-size: 42px;
+        line-height: 1;
+      }
+
+      .result-card.current .value,
+      .result-change .value {
+        color: var(--lime);
+      }
+
+      .result-change {
+        border-color: rgba(206, 242, 106, 0.48);
+        background: rgba(206, 242, 106, 0.04);
+      }
+
+      .result-change.pink,
+      .result-card.pink {
+        border-color: rgba(255, 137, 194, 0.48);
+        background: rgba(255, 137, 194, 0.04);
+      }
+
+      .result-change.pink .value,
+      .result-card.pink .value {
+        color: var(--pink);
+      }
+
+      .price-table,
+      .zone-table {
+        display: grid;
+        border: 1px solid rgba(245, 242, 255, 0.24);
+      }
+
+      .price-head,
+      .price-row,
+      .zone-head,
+      .zone-row {
+        display: grid;
+        align-items: center;
+        min-height: 74px;
+        border-bottom: 1px solid rgba(245, 242, 255, 0.11);
+      }
+
+      .price-head,
+      .zone-head {
+        min-height: 50px;
+        color: rgba(245, 242, 255, 0.62);
+        font-size: 14px;
+      }
+
+      .price-row:last-child,
+      .zone-row:last-child {
+        border-bottom: 0;
+      }
+
+      .price-head,
+      .price-row {
+        grid-template-columns: 1.18fr 0.72fr 0.72fr 2.3fr 0.72fr;
+      }
+
+      .zone-head,
+      .zone-row {
+        grid-template-columns: 1.05fr 0.72fr 0.72fr 2.4fr 0.78fr;
+      }
+
+      .price-head > div,
+      .price-row > div,
+      .zone-head > div,
+      .zone-row > div {
+        padding: 0 14px;
+      }
+
+      .price-name,
+      .price-num,
+      .price-value,
+      .zone-name,
+      .zone-num,
+      .zone-value {
+        color: rgba(245, 242, 255, 0.84);
+        font-size: 18px;
+      }
+
+      .price-name.sea { color: #68a0ff; }
+      .price-name.fast,
+      .price-name.land { color: var(--lime); }
+      .price-name.air,
+      .price-name.express { color: #ffa95c; }
+
+      .price-track,
+      .zone-track {
+        position: relative;
+        height: 30px;
+      }
+
+      .price-track::before,
+      .zone-track::before {
+        content: "";
         position: absolute;
         left: 50%;
-        bottom: calc(100% + 13px);
-        z-index: 5;
-        width: 300px;
-        padding: 12px 14px;
-        border: 1px solid rgba(176, 145, 243, 0.78);
-        background: #211d2d;
-        color: var(--paper);
-        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
-        font-size: 13px;
-        font-weight: 650;
-        line-height: 1.45;
-        text-align: left;
-        transform: translateX(-50%);
-        pointer-events: none;
+        top: 6px;
+        bottom: 6px;
+        width: 1px;
+        background: rgba(245, 242, 255, 0.28);
       }
 
-      .v-root { left: 330px; top: 18px; width: 170px; }
-      .v-head { left: 58px; top: 132px; width: 108px; }
-      .v-tail { left: 276px; top: 132px; width: 108px; }
-      .v-ware { left: 494px; top: 132px; width: 108px; }
-      .v-purchase { left: 712px; top: 132px; width: 108px; }
-      .v-mode-structure { left: 16px; top: 270px; width: 126px; }
-      .v-inventory-head { left: 154px; top: 270px; width: 112px; }
-      .v-tail-price { left: 250px; top: 270px; width: 112px; }
-      .v-order-dist { left: 376px; top: 270px; width: 126px; }
-      .v-rent-price { left: 520px; top: 270px; width: 112px; }
-      .v-inventory-ware { left: 646px; top: 270px; width: 112px; }
-      .v-mode-price { left: 0; top: 420px; width: 102px; }
-      .v-ship-volume { left: 118px; top: 420px; width: 102px; }
+      .price-delta,
+      .zone-delta {
+        position: absolute;
+        top: 4px;
+        height: 22px;
+        background: rgba(206, 242, 106, 0.78);
+      }
 
-      .h-root { left: 24px; top: 302px; width: 128px; }
-      .h-head { left: 218px; top: 82px; width: 110px; }
-      .h-tail { left: 218px; top: 232px; width: 110px; }
-      .h-ware { left: 218px; top: 382px; width: 110px; }
-      .h-purchase { left: 218px; top: 532px; width: 110px; }
-      .h-mode-structure { left: 408px; top: 36px; width: 126px; }
-      .h-inventory-head { left: 408px; top: 128px; width: 112px; }
-      .h-tail-price { left: 408px; top: 208px; width: 112px; }
-      .h-order-dist { left: 408px; top: 292px; width: 126px; }
-      .h-rent-price { left: 408px; top: 366px; width: 112px; }
-      .h-inventory-ware { left: 408px; top: 458px; width: 112px; }
-      .h-mode-price { left: 618px; top: 14px; width: 102px; }
-      .h-ship-volume { left: 618px; top: 82px; width: 102px; }
+      .price-delta,
+      .zone-delta.positive {
+        left: 50%;
+        width: var(--w);
+      }
+
+      .price-delta.down,
+      .zone-delta.negative,
+      .zone-delta:not(.positive) {
+        right: 50%;
+        left: auto;
+        width: var(--w);
+      }
+
+      .price-delta.up,
+      .zone-delta.negative {
+        background: rgba(255, 137, 194, 0.78);
+      }
+
+      .price-value.down,
+      .zone-value.positive { color: var(--lime); }
+      .price-value.up,
+      .zone-value.negative,
+      .zone-value { color: var(--pink); }
+
+      .modal-shell[data-active-modal="unit-price"] .price-head {
+        min-height: 58px;
+      }
+
+      .modal-shell[data-active-modal="unit-price"] .price-row {
+        min-height: 92px;
+      }
+
+      .modal-shell[data-active-modal="unit-price"] .legend i.down {
+        background: var(--lime);
+      }
+
+      .modal-shell[data-active-modal="unit-price"] .legend i.up {
+        background: var(--pink);
+      }
+
+      .modal-shell[data-active-modal="tail-price"] .zone-head,
+      .modal-shell[data-active-modal="order-distribution"] .zone-head {
+        min-height: 58px;
+      }
+
+      .modal-shell[data-active-modal="tail-price"] .zone-row,
+      .modal-shell[data-active-modal="order-distribution"] .zone-row {
+        min-height: 86px;
+      }
+
+      .modal-shell[data-active-modal="tail-price"] .result-change {
+        border-color: rgba(255, 137, 194, 0.48);
+        background: rgba(255, 137, 194, 0.04);
+      }
+
+      .modal-shell[data-active-modal="tail-price"] .result-change .value,
+      .modal-shell[data-active-modal="tail-price"] .result-card.current .value {
+        color: var(--pink);
+      }
+
+      .inventory-modal .full-modal {
+        inset: 42px 48px 28px;
+        grid-template-columns: minmax(0, 1.74fr) minmax(460px, 1.02fr);
+        padding-right: 78px;
+      }
+
+      .inventory-modal .modal-copy {
+        padding-right: 18px;
+      }
+
+      .inventory-modal .evidence-title {
+        justify-content: flex-start;
+      }
+
+      .inventory-modal .evidence-body {
+        display: grid;
+        grid-template-rows: 126px 1fr;
+        gap: 16px;
+      }
+
+      .inventory-modal .result-strip {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .inventory-modal .result-card {
+        border-color: rgba(206, 242, 106, 0.48);
+      }
+
+      .kpi-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .kpi-card {
+        display: grid;
+        align-content: center;
+        min-height: 126px;
+        padding: 18px 24px;
+        border: 1px solid rgba(245, 242, 255, 0.24);
+        background: rgba(245, 242, 255, 0.028);
+      }
+
+      .kpi-card.primary {
+        border-color: rgba(206, 242, 106, 0.52);
+        background: rgba(206, 242, 106, 0.04);
+      }
+
+      .kpi-card .label {
+        color: rgba(245, 242, 255, 0.66);
+        font-size: 15px;
+        line-height: 1;
+      }
+
+      .kpi-card .kpi-topline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .kpi-card .kpi-topline em {
+        color: var(--lime);
+        font-size: 15px;
+        font-style: normal;
+        white-space: nowrap;
+      }
+
+      .kpi-card .value {
+        margin-top: 12px;
+        color: var(--paper);
+        font-size: 42px;
+        line-height: 1;
+      }
+
+      .kpi-card.primary .value {
+        color: var(--lime);
+      }
+
+      .dual-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 0.96fr) 206px minmax(0, 0.96fr);
+        grid-template-rows: 72px repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        min-height: 0;
+      }
+
+      .compare-head,
+      .compare-cell,
+      .compare-axis {
+        display: grid;
+        align-content: center;
+        border: 1px solid rgba(245, 242, 255, 0.2);
+        background: rgba(245, 242, 255, 0.028);
+      }
+
+      .compare-head {
+        padding: 0 20px;
+        justify-items: center;
+        text-align: center;
+      }
+
+      .compare-head h3 {
+        margin: 0;
+        font-size: 24px;
+        line-height: 1;
+      }
+
+      .compare-head span {
+        margin-top: 8px;
+        color: rgba(245, 242, 255, 0.56);
+        font-size: 13px;
+        line-height: 1.2;
+      }
+
+      .compare-head.ship h3 { color: var(--blue); }
+      .compare-head.axis h3 { color: var(--lavender); }
+      .compare-head.rent h3 { color: var(--orange); }
+
+      .compare-cell {
+        position: relative;
+        padding: 0 22px;
+      }
+
+      .compare-cell b {
+        color: rgba(245, 242, 255, 0.92);
+        font-size: 18px;
+        line-height: 1.18;
+      }
+
+      .compare-cell span {
+        margin-top: 9px;
+        color: rgba(245, 242, 255, 0.62);
+        font-size: 14px;
+        line-height: 1.34;
+      }
+
+      .compare-axis {
+        position: relative;
+        place-items: center;
+        justify-items: center;
+        padding: 0 16px;
+        border-color: rgba(176, 145, 243, 0.42);
+        background: rgba(176, 145, 243, 0.04);
+      }
+
+      .compare-axis::before,
+      .compare-axis::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 12px;
+        height: 2px;
+        background: var(--lavender);
+      }
+
+      .compare-axis::before { left: -13px; }
+      .compare-axis::after { right: -13px; }
+
+      .compare-axis b {
+        color: var(--paper);
+        font-size: 19px;
+        line-height: 1.15;
+        text-align: center;
+      }
+
+      .compare-axis span {
+        margin-top: 8px;
+        color: rgba(245, 242, 255, 0.58);
+        font-size: 13px;
+        line-height: 1.2;
+        text-align: center;
+      }
+
+      .engine-flow {
+        display: grid;
+        grid-template-columns: 1.72fr 1fr 1.72fr;
+        grid-template-rows: auto repeat(4, 1fr);
+        gap: 12px;
+      }
+
+      .flow-head,
+      .flow-mid,
+      .flow-card {
+        display: grid;
+        align-content: center;
+        min-height: 70px;
+        padding: 14px 18px;
+        border: 1px solid rgba(245, 242, 255, 0.22);
+        background: rgba(245, 242, 255, 0.026);
+      }
+
+      .flow-head {
+        text-align: center;
+      }
+
+      .flow-head h3,
+      .flow-mid h3,
+      .flow-card h3 {
+        margin: 0 0 8px;
+        color: var(--paper);
+        font-size: 18px;
+        line-height: 1.15;
+      }
+
+      .flow-head.shipping h3 { color: #68a0ff; }
+      .flow-head.inventory h3 { color: #ffa95c; }
+      .flow-head.middle h3,
+      .flow-mid h3 { color: var(--lavender); }
+
+      .flow-head p,
+      .flow-mid p,
+      .flow-card p {
+        margin: 0;
+        color: rgba(245, 242, 255, 0.66);
+        font-size: 13px;
+        line-height: 1.38;
+      }
+
+      .flow-mid,
+      .flow-card {
+        position: relative;
+      }
+
+      .flow-mid::before,
+      .flow-mid::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 12px;
+        height: 2px;
+        background: var(--lavender);
+      }
+
+      .flow-mid::before { right: 100%; }
+      .flow-mid::after { left: 100%; }
+
+      .modal-copy a {
+        color: var(--lavender);
+        text-decoration-thickness: 2px;
+      }
+
     </style>
   </head>
   <body>
     <main class="page">
-      <section class="panel" aria-label="从上往下展开版本">
-        <h2 class="panel-title">从上往下展开</h2>
-        <div class="graph vertical">
-          <svg class="links" viewBox="0 0 830 660" aria-hidden="true">
-            <path d="M415 66V102" />
-            <path d="M112 102H766" />
-            <path d="M112 102V132" />
-            <path d="M330 102V132" />
-            <path d="M548 102V132" />
-            <path d="M766 102V132" />
+      <header class="topbar">
+        <div class="brand">GERALD LEUNG</div>
+        <nav class="nav" aria-label="页面导航">
+          <span>作品集</span>
+          <span>供应链降本</span>
+        </nav>
+      </header>
 
-            <path d="M112 180V232" />
-            <path d="M79 232H210" />
-            <path d="M79 232V270" />
-            <path d="M210 232V270" />
-            <path d="M79 318V374" />
-            <path d="M51 374H169" />
-            <path d="M51 374V420" />
-            <path d="M169 374V420" />
+      <section class="hero" aria-label="供应链降本逻辑拆解">
+        <div class="intro">
+          <h1>供应链降本<br />逻辑拆解</h1>
+          <p class="definition">把年度降本目标拆到费用结构、业务动作与过程指标，形成一条可观察、可归因、可复盘的降本路径。</p>
 
-            <path d="M330 180V232" />
-            <path d="M306 232H439" />
-            <path d="M306 232V270" />
-            <path d="M439 232V270" />
+          <div class="outcomes" aria-label="项目成果">
+            <h2>项目成果</h2>
+            <div class="result-grid">
+              <div class="metric">
+                <div class="metric-label">目标降本</div>
+                <div class="metric-value">2.4% - 3.2%</div>
+              </div>
+              <div class="metric actual">
+                <div class="metric-label">实际降本</div>
+                <div class="metric-value">3.6%</div>
+              </div>
+            </div>
+          </div>
 
-            <path d="M548 180V232" />
-            <path d="M576 232H702" />
-            <path d="M576 232V270" />
-            <path d="M702 232V270" />
+          <div class="anchors" aria-label="项目锚点">
+            <div class="anchor">目标不是只看总降本，而是拆清成本从哪里来。</div>
+            <div class="anchor">动作不是孤立推进，而是落到可影响的变量。</div>
+            <div class="anchor">复盘不是结果归因，而是建立可重复的判断路径。</div>
+          </div>
+        </div>
 
-            <path class="same-action" d="M210 318V372H702V318" />
-          </svg>
+        <div class="visual">
+          <div class="visual-title">目标到变量的拆解链路</div>
+          <div class="diagram" aria-label="供应链降本逻辑拆解图">
+            <div class="logic-graph">
+              <svg class="logic-full" viewBox="0 0 920 560" role="img" aria-label="供应链降本目标到变量的拆解链路">
+                <defs>
+                  <filter id="nodeGlow" x="-30%" y="-40%" width="160%" height="180%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#f5f2ff" flood-opacity="0.22" />
+                  </filter>
+                  <style>
+                    .edge {
+                      fill: none;
+                      stroke: rgb(176, 145, 243);
+                      stroke-width: 4;
+                      stroke-linecap: butt;
+                      stroke-linejoin: round;
+                    }
 
-          <button class="node root v-root" data-tip="供应链年度降本目标的总入口，向下拆解到头程、尾程、仓储、采购四类成本动作。">总降本</button>
-          <button class="node v-head" data-tip="商品从供应端发往海外仓或平台仓前段产生的物流成本，主要受物流方式结构、物流方式单价、发货量和库存控制影响。">头程成本</button>
-          <button class="node v-tail" data-tip="订单从海外仓发往消费者的配送成本，主要受尾程单价和订单区域分布影响。">尾程成本</button>
-          <button class="node v-ware" data-tip="库存存放期间产生的仓租成本，主要受仓租单价和库存控制影响。">仓储成本</button>
-          <button class="node v-purchase" data-tip="采购成本降低主要来自供应商协商、价格谈判、替代料或替代方案等采购动作，目前主要依赖采购工程师业务能力。">采购成本</button>
+                    .edge.dashed {
+                      stroke-dasharray: 10 10;
+                    }
 
-          <button class="node clickable v-mode-structure" data-tip="不同头程物流方式的发货占比。低单价方式占比提升、高单价方式占比下降，会改善整体头程成本结构。">物流方式<br />结构</button>
-          <button class="node inventory clickable v-inventory-head" data-tip="通过发货前的安库策略和库存发出后的库龄推演，预判未来缺口与仓租风险，辅助库存决策。">库存控制</button>
-          <button class="node clickable v-tail-price" data-tip="订单尾程配送的单位成本。物流商管理、报价优化和服务商切换会影响不同 Zone 的尾程单价。">尾程单价</button>
-          <button class="node clickable v-order-dist" data-tip="通过预判订单区域分布，提高最优发货仓匹配度，使订单更靠近消费者，降低等待时间和尾程运费。">订单分布<br />预判准确度</button>
-          <button class="node v-rent-price" data-tip="物流商按货型和库龄分段设置仓租单价。货型越特殊、库龄越高，单价通常越高；当次仓租通常按观测期在库体积 × 对应单价计算。">仓租单价</button>
-          <button class="node inventory clickable v-inventory-ware" data-tip="同头程侧库存控制，是同一类动作在仓储成本中的体现。通过时序推演预判未来库龄和仓租风险。">库存控制</button>
-          <button class="node clickable v-mode-price" data-tip="不同头程物流方式的单位重量成本。固定发货结构后，可以单独观察渠道单价变化。">物流方式<br />单价</button>
-          <button class="node v-ship-volume" data-tip="头程费用的数量基础。发货量越大，物流方式结构和单价变化对总成本的影响越明显。">发货量</button>
+                    .node-box {
+                      fill: rgba(255, 137, 194, 0.84);
+                      stroke: rgba(245, 242, 255, 0.62);
+                      stroke-width: 2;
+                      rx: 6;
+                      filter: url(#nodeGlow);
+                    }
+
+                    .node-box.clickable {
+                      stroke: rgba(206, 242, 106, 0.62);
+                    }
+
+                    .node-box.root {
+                      fill: rgba(255, 137, 194, 0.94);
+                    }
+
+                    .node-box.inventory {
+                      fill: rgba(87, 151, 255, 0.92);
+                    }
+
+                    .node-text {
+                      fill: #10131a;
+                      font-family: "LXGW WenKai", "Microsoft YaHei", sans-serif;
+                      font-size: 17px;
+                      font-weight: 800;
+                      text-anchor: middle;
+                      dominant-baseline: middle;
+                    }
+
+                    .node-text.inventory {
+                      fill: #f5f2ff;
+                    }
+
+                  </style>
+                </defs>
+
+                <path class="edge" d="M190 280H230" />
+                <path class="edge" d="M230 104V494" />
+                <path class="edge" d="M230 104H260" />
+                <path class="edge" d="M230 234H260" />
+                <path class="edge" d="M230 364H260" />
+                <path class="edge" d="M230 494H260" />
+
+                <path class="edge" d="M414 104H466" />
+                <path class="edge" d="M466 44V132" />
+                <path class="edge" d="M466 44H500" />
+                <path class="edge" d="M466 132H500" />
+
+                <path class="edge" d="M654 44H700" />
+                <path class="edge" d="M700 24V104" />
+                <path class="edge" d="M700 24H730" />
+                <path class="edge" d="M700 104H730" />
+
+                <path class="edge" d="M414 234H466" />
+                <path class="edge" d="M466 214V290" />
+                <path class="edge" d="M466 214H500" />
+                <path class="edge" d="M466 290H500" />
+
+                <path class="edge" d="M414 364H466" />
+                <path class="edge" d="M466 364V454" />
+                <path class="edge" d="M466 364H500" />
+                <path class="edge" d="M466 454H500" />
+
+                <path class="edge dashed" d="M654 132H686V454H654" />
+
+                <g class="interactive-node" tabindex="0" data-tip-key="supply-cost" data-tip="供应链年度降本目标的总入口，向下拆解到头程、尾程、仓储、采购四类成本动作。">
+                  <rect class="node-box root" x="36" y="253" width="154" height="54" />
+                  <text class="node-text" x="113" y="280">供应链降本</text>
+                </g>
+
+                <g class="interactive-node" tabindex="0" data-tip-key="head-cost" data-tip="商品从供应端发往海外仓或平台仓前段产生的物流成本，主要受物流方式结构、物流方式单价、发货量和库存控制影响。">
+                  <rect class="node-box" x="260" y="77" width="154" height="54" />
+                  <text class="node-text" x="337" y="104">头程成本</text>
+                </g>
+
+                <g class="interactive-node" tabindex="0" data-tip-key="tail-cost" data-tip="订单从海外仓发往消费者的配送成本，主要受尾程单价和订单区域分布影响。">
+                  <rect class="node-box" x="260" y="207" width="154" height="54" />
+                  <text class="node-text" x="337" y="234">尾程成本</text>
+                </g>
+
+                <g class="interactive-node" tabindex="0" data-tip-key="ware-cost" data-tip="库存存放期间产生的仓租成本，主要受仓租单价和库存控制影响。">
+                  <rect class="node-box" x="260" y="337" width="154" height="54" />
+                  <text class="node-text" x="337" y="364">仓储成本</text>
+                </g>
+
+                <g class="interactive-node" tabindex="0" data-tip-key="purchase-cost" data-tip="采购成本降低主要来自供应商协商、价格谈判、替代料或替代方案等采购动作，目前主要依赖采购工程师业务能力。">
+                  <rect class="node-box" x="260" y="467" width="154" height="54" />
+                  <text class="node-text" x="337" y="494">采购成本</text>
+                </g>
+
+                <g class="interactive-node" role="button" tabindex="0" data-modal="mode-structure" data-tip="不同头程物流方式的发货占比。低单价方式占比提升、高单价方式占比下降，会改善整体头程成本结构。">
+                <rect class="node-box clickable" x="500" y="17" width="154" height="54" />
+                <text class="node-text" x="577" y="38">
+                  <tspan x="577" dy="0">物流方式</tspan>
+                  <tspan x="577" dy="19">结构</tspan>
+                </text>
+                </g>
+
+                <g class="interactive-node" role="button" tabindex="0" data-modal="inventory-control" data-tip="通过发货前的安库策略和库存发出后的库龄推演，预判未来缺口与仓租风险，辅助库存决策。">
+                <rect class="node-box inventory clickable" x="500" y="105" width="154" height="54" />
+                <text class="node-text inventory" x="577" y="132">库存控制</text>
+                </g>
+
+                <g class="interactive-node" role="button" tabindex="0" data-modal="tail-price" data-tip="订单尾程配送的单位成本。物流商管理、报价优化和服务商切换会影响不同 Zone 的尾程单价。">
+                <rect class="node-box clickable" x="500" y="187" width="154" height="54" />
+                <text class="node-text" x="577" y="214">尾程单价</text>
+                </g>
+
+                <g class="interactive-node" role="button" tabindex="0" data-modal="order-distribution" data-tip="通过预判订单区域分布，提高最优发货仓匹配度，使订单更靠近消费者，降低等待时间和尾程运费。">
+                <rect class="node-box clickable" x="500" y="263" width="154" height="54" />
+                <text class="node-text" x="577" y="284">
+                  <tspan x="577" dy="0">订单分布</tspan>
+                  <tspan x="577" dy="19">预判准确度</tspan>
+                </text>
+                </g>
+
+                <g class="interactive-node" tabindex="0" data-tip-key="rent-price" data-tip="物流商按货型和库龄分段设置仓租单价。货型越特殊、库龄越高，单价通常越高；当次仓租通常按观测期在库体积 × 对应单价计算。">
+                  <rect class="node-box" x="500" y="337" width="154" height="54" />
+                  <text class="node-text" x="577" y="364">仓租单价</text>
+                </g>
+
+                <g class="interactive-node" role="button" tabindex="0" data-modal="inventory-control" data-tip="同头程侧库存控制，是同一类动作在仓储成本中的体现。通过时序推演预判未来库龄和仓租风险。">
+                <rect class="node-box inventory clickable" x="500" y="427" width="154" height="54" />
+                <text class="node-text inventory" x="577" y="454">库存控制</text>
+                </g>
+
+                <g class="interactive-node" role="button" tabindex="0" data-modal="unit-price" data-tip="不同头程物流方式的单位重量成本。固定发货结构后，可以单独观察渠道单价变化。">
+                <rect class="node-box clickable" x="730" y="-3" width="154" height="54" />
+                <text class="node-text" x="807" y="18">
+                  <tspan x="807" dy="0">物流方式</tspan>
+                  <tspan x="807" dy="19">单价</tspan>
+                </text>
+                </g>
+
+                <g class="interactive-node" tabindex="0" data-tip-key="ship-volume" data-tip="头程费用的数量基础。发货量越大，物流方式结构和单价变化对总成本的影响越明显。">
+                  <rect class="node-box" x="730" y="77" width="154" height="54" />
+                  <text class="node-text" x="807" y="104">发货量</text>
+                </g>
+
+              </svg>
+              <svg class="logic-lines" viewBox="0 0 920 560" aria-hidden="true">
+                <path d="M190 280H230" />
+                <path d="M230 104V494" />
+                <path d="M230 104H260" />
+                <path d="M230 234H260" />
+                <path d="M230 364H260" />
+                <path d="M230 494H260" />
+
+                <path d="M414 104H466" />
+                <path d="M466 64V154" />
+                <path d="M466 64H500" />
+                <path d="M466 154H500" />
+                <path d="M654 64H700" />
+                <path d="M700 44V128" />
+                <path d="M700 44H730" />
+                <path d="M700 128H730" />
+
+                <path d="M414 234H466" />
+                <path d="M466 214V290" />
+                <path d="M466 214H500" />
+                <path d="M466 290H500" />
+
+                <path d="M414 364H466" />
+                <path d="M466 364V454" />
+                <path d="M466 364H500" />
+                <path d="M466 454H500" />
+
+                <path class="same-action" d="M654 154H686V454H654" />
+              </svg>
+
+              <div class="g-node root g-root" data-tip="供应链年度降本目标的总入口，向下拆解到头程、尾程、仓储、采购四类成本动作。">供应链降本</div>
+              <div class="g-node g-head" data-tip="商品从供应端发往海外仓或平台仓前段产生的物流成本，主要受物流方式结构、物流方式单价、发货量和库存控制影响。">头程成本</div>
+              <div class="g-node g-tail" data-tip="订单从海外仓发往消费者的配送成本，主要受尾程单价和订单区域分布影响。">尾程成本</div>
+              <div class="g-node g-ware" data-tip="库存存放期间产生的仓租成本，主要受仓租单价和库存控制影响。">仓储成本</div>
+              <div class="g-node g-purchase" data-tip="采购成本降低主要来自供应商协商、价格谈判、替代料或替代方案等采购动作，目前主要依赖采购工程师业务能力。">采购成本</div>
+
+              <button class="g-node g-mode-structure" type="button" data-modal="mode-structure" data-tip="不同头程物流方式的发货占比。低单价方式占比提升、高单价方式占比下降，会改善整体头程成本结构。">物流方式<br />结构</button>
+              <button class="g-node inventory g-inventory-head" type="button" data-modal="inventory-control" data-tip="通过发货前的安库策略和库存发出后的库龄推演，预判未来缺口与仓租风险，辅助库存决策。">库存控制</button>
+              <button class="g-node g-tail-price" type="button" data-modal="tail-price" data-tip="订单尾程配送的单位成本。物流商管理、报价优化和服务商切换会影响不同 Zone 的尾程单价。">尾程单价</button>
+              <button class="g-node g-order-dist" type="button" data-modal="order-distribution" data-tip="通过预判订单区域分布，提高最优发货仓匹配度，使订单更靠近消费者，降低等待时间和尾程运费。">订单分布<br />预判准确度</button>
+              <div class="g-node g-rent-price" data-tip="物流商按货型和库龄分段设置仓租单价。货型越特殊、库龄越高，单价通常越高；当次仓租通常按观测期在库体积 × 对应单价计算。">仓租单价</div>
+              <button class="g-node inventory g-inventory-ware" type="button" data-modal="inventory-control" data-tip="同头程侧库存控制，是同一类动作在仓储成本中的体现。通过时序推演预判未来库龄和仓租风险。">库存控制</button>
+              <button class="g-node g-mode-price" type="button" data-modal="unit-price" data-tip="不同头程物流方式的单位重量成本。固定发货结构后，可以单独观察渠道单价变化。">物流方式<br />单价</button>
+              <div class="g-node g-ship-volume" data-tip="头程费用的数量基础。发货量越大，物流方式结构和单价变化对总成本的影响越明显。">发货量</div>
+            </div>
+          </div>
         </div>
       </section>
+      <div class="modal-shell" data-modal-shell hidden>
+        <div class="modal-overlay" data-modal-close aria-hidden="true"></div>
+        <section class="full-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+          <button class="close-button" type="button" data-modal-close aria-label="Close">&times;</button>
+          <div class="modal-content" data-modal-content></div>
+        </section>
+      </div>
+      <div class="node-tooltip" data-node-tooltip hidden></div>
 
-      <section class="panel" aria-label="供应链降本逻辑拆解">
-        <h2 class="panel-title">供应链降本逻辑拆解</h2>
-        <div class="graph horizontal">
-          <svg class="links" viewBox="0 0 830 660" aria-hidden="true">
-            <path d="M152 326H184" />
-            <path d="M184 106V556" />
-            <path d="M184 106H218" />
-            <path d="M184 256H218" />
-            <path d="M184 406H218" />
-            <path d="M184 556H218" />
+      <template id="modal-mode-structure" data-modal-label="Detail">
+<div class="evidence">
+          <div class="evidence-title">
+            <h2>物流方式结构影响</h2>
+            <div class="legend">
+              <span><i class="sea-bg"></i>普船</span>
+              <span><i class="fast-land-bg"></i>快船/陆运</span>
+              <span><i class="express-air-bg"></i>空运/快递</span>
+            </div>
+          </div>
 
-            <path d="M328 106H370" />
-            <path d="M370 60V152" />
-            <path d="M370 60H408" />
-            <path d="M370 152H408" />
-            <path d="M534 60H580" />
-            <path d="M580 38V106" />
-            <path d="M580 38H618" />
-            <path d="M580 106H618" />
+          <div class="evidence-body">
+            <div class="stack-panel">
+              <div class="stack-row">
+                <div class="stack-year">2024</div>
+                <div class="stack-bar">
+                  <div class="stack-segment sea-bg" style="width: 79.3%"><span>79.3%</span></div>
+                  <div class="stack-segment fast-land-bg" style="width: 17.1%"><span>17.1%</span></div>
+                  <div class="stack-segment express-air-bg small" style="width: 3.7%"><span>3.7%</span></div>
+                </div>
+              </div>
+              <div class="stack-row">
+                <div class="stack-year">2025</div>
+                <div class="stack-bar">
+                  <div class="stack-segment sea-bg" style="width: 90.5%"><span>90.5%</span></div>
+                  <div class="stack-segment fast-land-bg" style="width: 8%"><span>8.0%</span></div>
+                  <div class="stack-segment express-air-bg small micro-callout" style="width: 1.5%"><span>1.5%</span></div>
+                </div>
+              </div>
+            </div>
 
-            <path d="M328 256H370" />
-            <path d="M370 232V316" />
-            <path d="M370 232H408" />
-            <path d="M370 316H408" />
+            <div class="impact-strip">
+              <div class="impact-card">
+                <div class="label">2024 结构基准价指数</div>
+                <div class="value">126.2</div>
+              </div>
+              <div class="impact-card">
+                <div class="label">2025 结构套用 2024 单价</div>
+                <div class="value">111.7</div>
+              </div>
+              <div class="impact-card result">
+                <div class="label">纯结构影响</div>
+                <div class="value">-11.5%</div>
+              </div>
+            </div>
 
-            <path d="M328 406H370" />
-            <path d="M370 390V482" />
-            <path d="M370 390H408" />
-            <path d="M370 482H408" />
-
-            <path class="same-action" d="M520 152H570V482H520" />
-          </svg>
-
-          <button class="node root h-root" data-tip="供应链年度降本目标的总入口，向下拆解到头程、尾程、仓储、采购四类成本动作。">总降本</button>
-          <button class="node h-head" data-tip="商品从供应端发往海外仓或平台仓前段产生的物流成本，主要受物流方式结构、物流方式单价、发货量和库存控制影响。">头程成本</button>
-          <button class="node h-tail" data-tip="订单从海外仓发往消费者的配送成本，主要受尾程单价和订单区域分布影响。">尾程成本</button>
-          <button class="node h-ware" data-tip="库存存放期间产生的仓租成本，主要受仓租单价和库存控制影响。">仓储成本</button>
-          <button class="node h-purchase" data-tip="采购成本降低主要来自供应商协商、价格谈判、替代料或替代方案等采购动作，目前主要依赖采购工程师业务能力。">采购成本</button>
-
-          <button class="node clickable h-mode-structure" data-tip="不同头程物流方式的发货占比。低单价方式占比提升、高单价方式占比下降，会改善整体头程成本结构。">物流方式<br />结构</button>
-          <button class="node inventory clickable h-inventory-head" data-tip="通过发货前的安库策略和库存发出后的库龄推演，预判未来缺口与仓租风险，辅助库存决策。">库存控制</button>
-          <button class="node clickable h-tail-price" data-tip="订单尾程配送的单位成本。物流商管理、报价优化和服务商切换会影响不同 Zone 的尾程单价。">尾程单价</button>
-          <button class="node clickable h-order-dist" data-tip="通过预判订单区域分布，提高最优发货仓匹配度，使订单更靠近消费者，降低等待时间和尾程运费。">订单分布<br />预判准确度</button>
-          <button class="node h-rent-price" data-tip="物流商按货型和库龄分段设置仓租单价。货型越特殊、库龄越高，单价通常越高；当次仓租通常按观测期在库体积 × 对应单价计算。">仓租单价</button>
-          <button class="node inventory clickable h-inventory-ware" data-tip="同头程侧库存控制，是同一类动作在仓储成本中的体现。通过时序推演预判未来库龄和仓租风险。">库存控制</button>
-          <button class="node clickable h-mode-price" data-tip="不同头程物流方式的单位重量成本。固定发货结构后，可以单独观察渠道单价变化。">物流方式<br />单价</button>
-          <button class="node h-ship-volume" data-tip="头程费用的数量基础。发货量越大，物流方式结构和单价变化对总成本的影响越明显。">发货量</button>
+            <div class="share-table">
+              <div class="share-head">
+                <div>物流方式</div>
+                <div>2024结构值</div>
+                <div>2025结构值</div>
+                <div></div>
+                <div>变化值</div>
+              </div>
+              <div class="share-row">
+                <div class="mode-name">普船</div>
+                <div class="share-num">77.9</div>
+                <div class="share-num">89.9</div>
+                <div class="share-track"><span class="share-delta up" style="--w: 41.7%"></span></div>
+                <div class="share-value up">+12.0</div>
+              </div>
+              <div class="share-row">
+                <div class="mode-name">快船/陆运</div>
+                <div class="share-num">27.4</div>
+                <div class="share-num">13.0</div>
+                <div class="share-track"><span class="share-delta down" style="--w: 50%"></span></div>
+                <div class="share-value down">-14.4</div>
+              </div>
+              <div class="share-row">
+                <div class="mode-name">空运/快递</div>
+                <div class="share-num">20.9</div>
+                <div class="share-num">8.8</div>
+                <div class="share-track"><span class="share-delta down" style="--w: 42%"></span></div>
+                <div class="share-value down">-12.1</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
+
+        <div class="modal-copy">
+          <h2>物流方式结构</h2>
+          <section>
+            <h3>指标定义</h3>
+            <p>按头程一级物流方式观察实际发货占比。</p>
+            <p>固定 2024 年各物流方式单价，只替换 2025 年实际方式占比。</p>
+            <p>测算结构变化本身对头程基准价的影响。</p>
+          </section>
+          <section>
+            <h3>看板纠偏</h3>
+            <p>头程发货方式占比看板持续对照预算与实际，让计划、业务和管理者能及时看到方式结构是否偏离目标。</p>
+          </section>
+          <section>
+            <h3>模型约束</h3>
+            <p>发货测算模型中，应急物流方式默认不预留安库天数。</p>
+            <p>这会让空运、快递只覆盖真正紧急的需求，不被安全库存逻辑额外放大。</p>
+            <p>这个约束来自发货测算推演中的分配逻辑。</p>
+          </section>
+          <section>
+            <h3>当年绩效</h3>
+            <p>固定 2024 年单价后，2025 年方式结构使头程基准价指数由 126.2 降至 111.7，下降 11.5%。</p>
+            <p>普船贡献值上升，是因为它替代了更高价方式；快船/陆运和空运/快递贡献值同步收缩。</p>
+          </section>
+        </div>
+      </template>
+
+      <template id="modal-unit-price" data-modal-label="Detail">
+<div class="evidence">
+          <div class="evidence-title">
+            <h2>头程公斤单价指数</h2>
+            <div class="legend">
+              <span><i class="down"></i>指数下降</span>
+              <span><i class="up"></i>指数上升</span>
+            </div>
+          </div>
+
+          <div class="evidence-body">
+            <div class="result-strip">
+              <div class="result-card">
+                <div class="year">2024 固定结构指数</div>
+                <div class="value">126.2</div>
+              </div>
+              <div class="result-card current">
+                <div class="year">2025 同结构指数</div>
+                <div class="value">102.6</div>
+              </div>
+              <div class="result-change">
+                <div class="label">变化</div>
+                <div class="value">-18.7%</div>
+              </div>
+            </div>
+
+            <div class="price-table">
+              <div class="price-head">
+                <div>物流方式</div>
+                <div>2024</div>
+                <div>2025</div>
+                <div></div>
+                <div>变化值</div>
+              </div>
+              <div class="price-row">
+                <div class="mode-name sea">普船</div>
+                <div class="price-num">100.0</div>
+                <div class="price-num">78.2</div>
+                <div class="price-track"><span class="price-delta down" style="--w: 30%"></span></div>
+                <div class="price-value down">-21.8%</div>
+              </div>
+              <div class="price-row">
+                <div class="mode-name fast-land">快船</div>
+                <div class="price-num">145.5</div>
+                <div class="price-num">114.5</div>
+                <div class="price-track"><span class="price-delta down" style="--w: 29.3%"></span></div>
+                <div class="price-value down">-21.3%</div>
+              </div>
+              <div class="price-row">
+                <div class="mode-name fast-land">陆运</div>
+                <div class="price-num">259.1</div>
+                <div class="price-num">163.6</div>
+                <div class="price-track"><span class="price-delta down" style="--w: 50%"></span></div>
+                <div class="price-value down">-36.8%</div>
+              </div>
+              <div class="price-row">
+                <div class="mode-name express-air">空运</div>
+                <div class="price-num">470.0</div>
+                <div class="price-num">407.3</div>
+                <div class="price-track"><span class="price-delta down" style="--w: 18.3%"></span></div>
+                <div class="price-value down">-13.3%</div>
+              </div>
+              <div class="price-row">
+                <div class="mode-name express-air">快递</div>
+                <div class="price-num">525.5</div>
+                <div class="price-num">610.9</div>
+                <div class="price-track"><span class="price-delta up" style="--w: 22.1%"></span></div>
+                <div class="price-value up">+16.3%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-copy">
+          <h2>物流方式单价</h2>
+          <section>
+            <h3>指标定义</h3>
+            <p>按头程物流方式观察公斤单价变化。</p>
+            <p>以 2024 年普船单价为 100，其余方式换算为指数。</p>
+            <p>顶部 KPI 固定 2024 年发货结构，只替换各方式 2025 年单价。</p>
+            <p>页面只展示指数和变化率，不披露实际单价。</p>
+          </section>
+          <section>
+            <h3>主导动作</h3>
+            <p>普船、快船等主渠道单价下降，主要来自物流部头程组的渠道议价与物流商管理。</p>
+          </section>
+          <section>
+            <h3>数据价值</h3>
+            <p>固定结构后，可以剔除物流方式占比变化影响，单独观察渠道内单价下降。</p>
+          </section>
+          <section>
+            <h3>当年绩效</h3>
+            <p>固定 2024 年结构后，头程公斤单价指数由 126.2 降至 102.6，下降 18.7%；普船和快船单价分别下降 21.8% 和 21.3%。</p>
+          </section>
+        </div>
+      </template>
+
+      <template id="modal-tail-price" data-modal-label="Detail">
+<div class="evidence">
+          <div class="evidence-title">
+          <h2>第三方仓尾程单价指数</h2>
+            <div class="legend">
+              <span><i class="down"></i>指数下降</span>
+            </div>
+          </div>
+
+          <div class="evidence-body">
+            <div class="result-strip">
+              <div class="result-card">
+                <div class="year">2024 合计指数</div>
+                <div class="value">117.2</div>
+              </div>
+              <div class="result-card current">
+                <div class="year">2025 合计指数</div>
+                <div class="value">71.4</div>
+              </div>
+              <div class="result-change">
+                <div class="label">变化</div>
+                <div class="value">-39.1%</div>
+              </div>
+            </div>
+
+            <div class="zone-table">
+              <div class="zone-head">
+                <div>USPS Zone</div>
+                <div>2024</div>
+                <div>2025</div>
+                <div></div>
+                <div>变化值</div>
+              </div>
+              <div class="zone-row">
+                <div class="zone-name">Zone 1&2</div>
+                <div class="zone-num">100.0</div>
+                <div class="zone-num">54.8</div>
+                <div class="zone-track"><span class="zone-delta" style="--w: 47.1%"></span></div>
+                <div class="zone-value">-45.2%</div>
+              </div>
+              <div class="zone-row">
+                <div class="zone-name">Zone 3&4</div>
+                <div class="zone-num">104.6</div>
+                <div class="zone-num">60.8</div>
+                <div class="zone-track"><span class="zone-delta" style="--w: 43.6%"></span></div>
+                <div class="zone-value">-41.9%</div>
+              </div>
+              <div class="zone-row">
+                <div class="zone-name">Zone 5&6</div>
+                <div class="zone-num">114.7</div>
+                <div class="zone-num">71.5</div>
+                <div class="zone-track"><span class="zone-delta" style="--w: 39.3%"></span></div>
+                <div class="zone-value">-37.7%</div>
+              </div>
+              <div class="zone-row">
+                <div class="zone-name">Zone 7</div>
+                <div class="zone-num">128.1</div>
+                <div class="zone-num">91.1</div>
+                <div class="zone-track"><span class="zone-delta" style="--w: 30.1%"></span></div>
+                <div class="zone-value">-28.9%</div>
+              </div>
+              <div class="zone-row">
+                <div class="zone-name">Zone 8</div>
+                <div class="zone-num">130.4</div>
+                <div class="zone-num">96.4</div>
+                <div class="zone-track"><span class="zone-delta" style="--w: 27.2%"></span></div>
+                <div class="zone-value">-26.1%</div>
+              </div>
+              <div class="zone-row">
+                <div class="zone-name">Zone 9</div>
+                <div class="zone-num">287.9</div>
+                <div class="zone-num">173.9</div>
+                <div class="zone-track"><span class="zone-delta" style="--w: 41.3%"></span></div>
+                <div class="zone-value">-39.6%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-copy">
+          <h2>尾程单价</h2>
+          <section>
+            <h3>指标定义</h3>
+            <p>第三方仓订单的尾程单位物流成本。</p>
+            <p>以 2024 年 Zone 1&2 单价为 100，其余单价换算为指数。</p>
+            <p>页面只展示指数和变化率，不披露实际单价。</p>
+          </section>
+          <section>
+            <h3>主导动作</h3>
+            <p>2025 年尾程组引入报价更优的物流商，并持续进行物流商管理，这是单价下降的主因。</p>
+          </section>
+          <section>
+            <h3>数据价值</h3>
+            <p>统一基准后，可以看到 Zone 值越高，尾程单价通常越高；同时各 Zone 2025 年指数均低于 2024 年。</p>
+          </section>
+          <section>
+            <h3>当年绩效</h3>
+            <p>合计尾程单价指数由 117.2 降至 71.4，下降 39.1%；各 Zone 单价指数均下降。</p>
+          </section>
+        </div>
+      </template>
+
+      <template id="modal-order-distribution" data-modal-label="Detail">
+<div class="evidence">
+          <div class="evidence-title">
+            <h2>最优发货仓占比</h2>
+            <div class="legend">
+              <span><i class="up"></i>占比上升</span>
+              <span><i class="down"></i>占比下降</span>
+            </div>
+          </div>
+
+          <div class="evidence-body">
+            <div class="result-strip">
+              <div class="result-card">
+                <div class="year">2024</div>
+                <div class="value">66.3%</div>
+              </div>
+              <div class="result-card current">
+                <div class="year">2025</div>
+                <div class="value">79.8%</div>
+              </div>
+              <div class="result-change">
+                <div class="label">变化</div>
+                <div class="value">+13.5%</div>
+              </div>
+            </div>
+
+            <div class="zone-table">
+              <div class="zone-head">
+                <div>USPS Zone</div>
+                <div>2024</div>
+                <div>2025</div>
+                <div></div>
+                <div>变化值</div>
+              </div>
+              <div class="zone-row">
+                <div class="zone-name">Zone 1&2</div>
+                <div class="zone-num">12.0%</div>
+                <div class="zone-num">13.5%</div>
+                <div class="zone-track"><span class="zone-delta positive" style="--w: 7.6%"></span></div>
+                <div class="zone-value positive">+1.5%</div>
+              </div>
+              <div class="zone-row">
+                <div class="zone-name">Zone 3&4</div>
+                <div class="zone-num">18.6%</div>
+                <div class="zone-num">28.5%</div>
+                <div class="zone-track"><span class="zone-delta positive" style="--w: 50%"></span></div>
+                <div class="zone-value positive">+9.9%</div>
+              </div>
+              <div class="zone-row">
+                <div class="zone-name">Zone 5&6</div>
+                <div class="zone-num">35.9%</div>
+                <div class="zone-num">38.2%</div>
+                <div class="zone-track"><span class="zone-delta positive" style="--w: 11.6%"></span></div>
+                <div class="zone-value positive">+2.3%</div>
+              </div>
+              <div class="zone-row">
+                <div class="zone-name">Zone 7</div>
+                <div class="zone-num">10.9%</div>
+                <div class="zone-num">6.7%</div>
+                <div class="zone-track"><span class="zone-delta negative" style="--w: 21.2%"></span></div>
+                <div class="zone-value negative">-4.2%</div>
+              </div>
+              <div class="zone-row">
+                <div class="zone-name">Zone 8</div>
+                <div class="zone-num">22.5%</div>
+                <div class="zone-num">13.0%</div>
+                <div class="zone-track"><span class="zone-delta negative" style="--w: 48%"></span></div>
+                <div class="zone-value negative">-9.5%</div>
+              </div>
+              <div class="zone-row">
+                <div class="zone-name">Zone 9</div>
+                <div class="zone-num">0.1%</div>
+                <div class="zone-num">0.1%</div>
+                <div class="zone-track"><span class="zone-delta positive" style="--w: 0%"></span></div>
+                <div class="zone-value">0.0%</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-copy">
+          <h2>订单分布预判准确度</h2>
+          <section>
+            <h3>指标定义</h3>
+            <p>根据零售订单目的地邮编，倒推出最优发货 Zone。</p>
+            <p>实际发货 Zone 与最优 Zone 一致时，计入最优发货仓。</p>
+            <p>Zone 值越小，发货仓离买家越近。</p>
+            <p>买家等待时间更少，卖家承担的尾程运费也更低。</p>
+          </section>
+          <section>
+            <h3>业务动作</h3>
+            <p>建议发货占比模型被计划稳定执行后，区域库存更贴近真实订单分布，非必要跨区履约减少。</p>
+          </section>
+          <section>
+            <h3>当年绩效</h3>
+            <p>全年汇总口径下，最优发货仓占比由 66.3% 提升至 79.8%；Zone 8 占比由 22.5% 降至 13.0%。</p>
+          </section>
+          <section>
+            <h3>如何预判订单分布在哪个区域？</h3>
+            <p>分区测算推演会把订单目的地、区域基准和小样本平滑放进同一套分配逻辑。</p>
+            <a class="case-link" href="../../demos/supply-planning/forecast_main.html" target="_blank" rel="noreferrer">进入发货测算推演</a>
+          </section>
+        </div>
+      </template>
+
+      <template id="modal-inventory-control" data-modal-label="Detail">
+<div class="evidence">
+          <div class="evidence-title">
+            <h2>库存控制关键抓手：双轨时序推演</h2>
+          </div>
+
+          <div class="evidence-body">
+            <div class="kpi-row">
+              <div class="kpi-card primary">
+                <div class="label">年度库存周转天数变化</div>
+                <div class="value">-18 天</div>
+              </div>
+              <div class="kpi-card">
+                <div class="kpi-topline">
+                  <div class="label">仓租收入比</div>
+                  <em>变化 -0.2%</em>
+                </div>
+                <div class="value">1.2% → 1.0%</div>
+              </div>
+            </div>
+
+            <div class="dual-panel">
+              <div class="compare-head ship">
+                <h3>发货推演</h3>
+                <span>预判未来缺口与发货方式</span>
+              </div>
+              <div class="compare-head axis">
+                <h3>共同环节</h3>
+                <span>时序推演预判未来指标</span>
+              </div>
+              <div class="compare-head rent">
+                <h3>库存推演</h3>
+                <span>预判未来库龄与仓租风险</span>
+              </div>
+
+              <div class="compare-cell">
+                <b>需求预测/在途在库库存</b>
+                <span>进入发货测算模型，形成未来补货测算基础。</span>
+              </div>
+              <div class="compare-axis">
+                <b>时序输入</b>
+                <span>当前状态与未来变量同轴</span>
+              </div>
+              <div class="compare-cell">
+                <b>需求预测/在途在库批次库存/仓租报价</b>
+                <span>进入库龄推演，形成未来仓储成本测算基础。</span>
+              </div>
+
+              <div class="compare-cell">
+                <b>推演未来库存覆盖天数与缺口</b>
+                <span>判断是否需要补货，以及缺口发生在哪个时间段。</span>
+              </div>
+              <div class="compare-axis">
+                <b>未来状态推演</b>
+                <span>预判未来会变成什么状态</span>
+              </div>
+              <div class="compare-cell">
+                <b>推演未来库龄滚动与剩余库存</b>
+                <span>判断库存进入的库龄段及长期存放风险。</span>
+              </div>
+
+              <div class="compare-cell">
+                <b>常规预留安库，应急不预留安库</b>
+                <span>让安库服务常规补货，避免放大高价方式。</span>
+              </div>
+              <div class="compare-axis">
+                <b>规则约束</b>
+                <span>把业务规则嵌进模型计算</span>
+              </div>
+              <div class="compare-cell">
+                <b>按阶梯单价和在库体积测算仓租</b>
+                <span>借收费规则，将长期存放风险转为仓租预估。</span>
+              </div>
+
+              <div class="compare-cell">
+                <b>输出各物流方式发货建议</b>
+                <span>辅助计划员控制发货结构，降低高成本方式暴露。</span>
+              </div>
+              <div class="compare-axis">
+                <b>决策输出</b>
+                <span>把预判结果转成库存决策辅助</span>
+              </div>
+              <div class="compare-cell">
+                <b>输出高仓租、超龄、慢动风险清单</b>
+                <span>辅助清库存、调拨、促销和暂停补货。</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-copy">
+          <h2>库存控制</h2>
+          <section>
+            <h3>指标定义</h3>
+            <p>库存周转天数衡量库存占用效率。</p>
+            <p>仓租收入比衡量仓储费用相对收入的压力。</p>
+          </section>
+          <section>
+            <h3>方法框架</h3>
+            <p>库存控制由两条时序推演共同支撑。</p>
+            <p>发货前预判未来库存缺口，库存发出后预判未来库龄和仓租风险。</p>
+          </section>
+          <section>
+            <h3>发货推演</h3>
+            <p>需求预测、当前库存和在途库存进入发货测算。</p>
+            <p>常规物流方式保留安全库存，应急物流方式不预留安库，避免高价方式被安全库存逻辑额外放大。</p>
+          </section>
+          <section>
+            <h3>库存推演</h3>
+            <p>库存发出后，按库龄滚动、阶梯仓租单价和在库体积推演未来仓租。</p>
+            <p>结果用于定位高仓租、超龄、慢动库存，辅助清库存/调拨/促销/暂停补货。</p>
+          </section>
+          <section>
+            <h3>边界说明</h3>
+            <p>本页呈现周转天数下降 18 天和仓租收入比 1.2% → 1.0%。</p>
+            <p>仓租推演支持风险预判和业务纠偏，但不包装成可精确归因的直接节省金额。</p>
+          </section>
+        </div>
+      </template>
     </main>
+
+    <script>
+      (() => {
+        const shell = document.querySelector('[data-modal-shell]');
+        const dialog = shell?.querySelector('.full-modal');
+        const content = shell?.querySelector('[data-modal-content]');
+        const tooltip = document.querySelector('[data-node-tooltip]');
+        const openers = document.querySelectorAll('.logic-full [data-modal]');
+        const tooltipNodes = document.querySelectorAll('.logic-graph [data-tip]');
+        const tipText = {
+          'mode-structure': '不同头程物流方式的发货占比。低单价方式占比提升、高单价方式占比下降，会改善整体头程成本结构。',
+          'inventory-control': '通过发货前的安库策略和库存发出后的库龄推演，预判未来缺口与仓租风险，辅助库存决策。',
+          'tail-price': '订单尾程配送的单位成本。物流商管理、报价优化和服务商切换会影响不同 Zone 的尾程单价。',
+          'order-distribution': '通过预判订单区域分布，提高最优发货仓匹配度，使订单更靠近消费者，降低等待时间和尾程运费。',
+          'unit-price': '不同头程物流方式的单位重量成本。固定发货结构后，可以单独观察渠道单价变化。'
+        };
+
+        if (!shell || !dialog || !content) return;
+
+        const openModal = (id) => {
+          const template = document.getElementById('modal-' + id);
+          if (!template) return;
+          const label = template.dataset.modalLabel || 'Detail';
+          shell.dataset.activeModal = id;
+          shell.classList.toggle('inventory-modal', id === 'inventory-control');
+          content.innerHTML = template.innerHTML;
+          const title = content.querySelector('.modal-copy h2') || content.querySelector('.evidence-title h2');
+          if (title) title.id = 'modal-title';
+          dialog.setAttribute('aria-label', label);
+          shell.hidden = false;
+          document.body.classList.add('modal-open');
+          dialog.focus({ preventScroll: true });
+        };
+
+        const closeModal = () => {
+          shell.hidden = true;
+          delete shell.dataset.activeModal;
+          shell.classList.remove('inventory-modal');
+          content.innerHTML = '';
+          document.body.classList.remove('modal-open');
+        };
+
+        openers.forEach((node) => {
+          node.addEventListener('click', () => openModal(node.dataset.modal));
+          node.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              openModal(node.dataset.modal);
+            }
+          });
+        });
+
+        tooltipNodes.forEach((node) => {
+          const showTooltip = () => {
+            const text = node.dataset.tip || tipText[node.dataset.modal];
+            if (!tooltip || !text) return;
+            const rect = node.getBoundingClientRect();
+            tooltip.textContent = text;
+            tooltip.hidden = false;
+            const top = Math.max(18, rect.top - tooltip.offsetHeight - 14);
+            const left = Math.min(window.innerWidth - tooltip.offsetWidth - 18, Math.max(18, rect.left + rect.width / 2 - tooltip.offsetWidth / 2));
+            tooltip.style.top = `${top}px`;
+            tooltip.style.left = `${left}px`;
+          };
+
+          const hideTooltip = () => {
+            if (!tooltip) return;
+            tooltip.hidden = true;
+          };
+
+          node.addEventListener('mouseenter', showTooltip);
+          node.addEventListener('mouseleave', hideTooltip);
+          node.addEventListener('focus', showTooltip);
+          node.addEventListener('blur', hideTooltip);
+        });
+
+        shell.addEventListener('click', (event) => {
+          if (event.target.closest('[data-modal-close]')) closeModal();
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && !shell.hidden) closeModal();
+        });
+
+        const params = new URLSearchParams(window.location.search);
+        const initialTip = params.get('tip');
+        if (initialTip) {
+          const node = document.querySelector(`.logic-full [data-modal="${initialTip}"], .logic-full [data-tip-key="${initialTip}"]`);
+          if (node) requestAnimationFrame(() => node.dispatchEvent(new Event('mouseenter')));
+        }
+
+        const initial = params.get('modal');
+        if (initial) openModal(initial);
+      })();
+    </script>
   </body>
 </html>

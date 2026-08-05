@@ -1176,6 +1176,102 @@
           bottom: calc(50% - 54px);
         }
       }
+
+      .work-divider {
+        display: block;
+        height: 1px;
+        background: rgba(176, 145, 243, 0.72);
+      }
+
+      @media (min-width: 781px) {
+        .work {
+          grid-template-rows: auto auto minmax(0, 1fr);
+          gap: 24px;
+          padding-top: 4.8vh;
+          padding-bottom: 4.8vh;
+        }
+
+        .work-intro {
+          grid-template-columns: minmax(540px, 0.44fr) minmax(820px, 0.56fr);
+          gap: 28px;
+          align-items: center;
+        }
+
+        .work .section-heading h2 {
+          font-size: clamp(42px, 2.8vw, 54px);
+        }
+
+        .section-heading .kicker {
+          margin-bottom: 9px;
+          font-size: 18px;
+        }
+
+        .framework-panel {
+          grid-template-columns: 216px minmax(0, 1fr);
+          gap: 64px;
+          min-height: 138px;
+        }
+
+        .mini-matrix {
+          width: 190px;
+          height: 138px;
+        }
+
+        .mini-matrix::before {
+          top: 14px;
+          bottom: 14px;
+          width: 3px;
+        }
+
+        .mini-matrix::after {
+          left: 14px;
+          right: 14px;
+          height: 3px;
+        }
+
+        .axis-chip {
+          min-width: 42px;
+          height: 22px;
+          padding: 0 8px;
+          font-size: 14px;
+        }
+
+        .axis-chip.left,
+        .axis-chip.right {
+          top: 58px;
+        }
+
+        .axis-chip.left {
+          left: 13px;
+        }
+
+        .axis-chip.right {
+          right: 13px;
+        }
+
+        .axis-chip.top {
+          top: 10px;
+        }
+
+        .axis-chip.bottom {
+          bottom: 10px;
+        }
+
+        .framework-notes {
+          gap: 5px;
+          font-size: 14px;
+          line-height: 1.34;
+        }
+
+        .framework-notes li {
+          padding-left: 15px;
+        }
+
+        .framework-notes li::before {
+          width: 5px;
+          height: 5px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1236,6 +1332,8 @@
             </ul>
           </div>
         </div>
+
+        <div class="work-divider" aria-hidden="true"></div>
 
         <div class="portfolio-axis-stage">
           <span class="quadrant-tag tl">分解×解释</span>
