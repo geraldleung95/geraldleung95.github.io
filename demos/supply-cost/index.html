@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>供应链降本逻辑拆解 | Gerald Leung</title>
+    <style>
+      :root {
+        --lavender: rgb(176, 145, 243);
+        --ink: #121119;
+        --panel: #17151f;
+        --paper: #f5f2ff;
+        --lime: #cef26a;
+        --pink: #ff89c2;
+        --blue: #5797ff;
+      }
+
+      @font-face {
+        font-family: "LXGW WenKai";
+        src: url("../../assets/fonts/LXGWWenKai-Medium.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--ink);
+        color: var(--paper);
+        font-family: Inter, "Segoe UI", "LXGW WenKai", "Microsoft YaHei", sans-serif;
+        font-weight: 800;
+      }
+
+      .page {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        padding: 58px 64px;
+      }
+
+      .panel {
+        position: relative;
+        min-height: calc(100vh - 116px);
+        border: 1px solid rgba(245, 242, 255, 0.32);
+        background: var(--panel);
+        overflow: hidden;
+      }
+
+      .panel:first-child {
+        display: none;
+      }
+
+      .panel-title {
+        position: absolute;
+        top: 26px;
+        left: 30px;
+        margin: 0;
+        font-size: 32px;
+        line-height: 1;
+        letter-spacing: 0;
+      }
+
+      .graph {
+        position: absolute;
+        left: 50%;
+        top: 54%;
+        transform: translate(-50%, -50%);
+      }
+
+      .graph.vertical {
+        width: 830px;
+        height: 660px;
+      }
+
+      .graph.horizontal {
+        width: 830px;
+        height: 660px;
+      }
+
+      .links {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .links path {
+        fill: none;
+        stroke: var(--lavender);
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .links .same-action {
+        stroke-dasharray: 11 10;
+        opacity: 0.92;
+      }
+
+      .node {
+        position: absolute;
+        display: grid;
+        place-items: center;
+        min-height: 48px;
+        padding: 0 10px;
+        border: 2px solid rgba(245, 242, 255, 0.56);
+        border-radius: 5px;
+        background: rgba(255, 137, 194, 0.82);
+        color: #10131a;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 800;
+        line-height: 1.16;
+        text-align: center;
+        letter-spacing: 0;
+        cursor: default;
+      }
+
+      .node.root {
+        background: rgba(255, 137, 194, 0.94);
+        font-size: 17px;
+      }
+
+      .node.inventory {
+        background: rgba(87, 151, 255, 0.9);
+        color: var(--paper);
+      }
+
+      .node.clickable {
+        box-shadow: 0 0 0 2px rgba(206, 242, 106, 0.34);
+      }
+
+      .node:hover,
+      .node:focus-visible {
+        border-color: var(--lime);
+        outline: none;
+      }
+
+      .node:hover::after,
+      .node:focus-visible::after {
+        content: attr(data-tip);
+        position: absolute;
+        left: 50%;
+        bottom: calc(100% + 13px);
+        z-index: 5;
+        width: 300px;
+        padding: 12px 14px;
+        border: 1px solid rgba(176, 145, 243, 0.78);
+        background: #211d2d;
+        color: var(--paper);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
+        font-size: 13px;
+        font-weight: 650;
+        line-height: 1.45;
+        text-align: left;
+        transform: translateX(-50%);
+        pointer-events: none;
+      }
+
+      .v-root { left: 330px; top: 18px; width: 170px; }
+      .v-head { left: 58px; top: 132px; width: 108px; }
+      .v-tail { left: 276px; top: 132px; width: 108px; }
+      .v-ware { left: 494px; top: 132px; width: 108px; }
+      .v-purchase { left: 712px; top: 132px; width: 108px; }
+      .v-mode-structure { left: 16px; top: 270px; width: 126px; }
+      .v-inventory-head { left: 154px; top: 270px; width: 112px; }
+      .v-tail-price { left: 250px; top: 270px; width: 112px; }
+      .v-order-dist { left: 376px; top: 270px; width: 126px; }
+      .v-rent-price { left: 520px; top: 270px; width: 112px; }
+      .v-inventory-ware { left: 646px; top: 270px; width: 112px; }
+      .v-mode-price { left: 0; top: 420px; width: 102px; }
+      .v-ship-volume { left: 118px; top: 420px; width: 102px; }
+
+      .h-root { left: 24px; top: 302px; width: 128px; }
+      .h-head { left: 218px; top: 82px; width: 110px; }
+      .h-tail { left: 218px; top: 232px; width: 110px; }
+      .h-ware { left: 218px; top: 382px; width: 110px; }
+      .h-purchase { left: 218px; top: 532px; width: 110px; }
+      .h-mode-structure { left: 408px; top: 36px; width: 126px; }
+      .h-inventory-head { left: 408px; top: 128px; width: 112px; }
+      .h-tail-price { left: 408px; top: 208px; width: 112px; }
+      .h-order-dist { left: 408px; top: 292px; width: 126px; }
+      .h-rent-price { left: 408px; top: 366px; width: 112px; }
+      .h-inventory-ware { left: 408px; top: 458px; width: 112px; }
+      .h-mode-price { left: 618px; top: 14px; width: 102px; }
+      .h-ship-volume { left: 618px; top: 82px; width: 102px; }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="panel" aria-label="从上往下展开版本">
+        <h2 class="panel-title">从上往下展开</h2>
+        <div class="graph vertical">
+          <svg class="links" viewBox="0 0 830 660" aria-hidden="true">
+            <path d="M415 66V102" />
+            <path d="M112 102H766" />
+            <path d="M112 102V132" />
+            <path d="M330 102V132" />
+            <path d="M548 102V132" />
+            <path d="M766 102V132" />
+
+            <path d="M112 180V232" />
+            <path d="M79 232H210" />
+            <path d="M79 232V270" />
+            <path d="M210 232V270" />
+            <path d="M79 318V374" />
+            <path d="M51 374H169" />
+            <path d="M51 374V420" />
+            <path d="M169 374V420" />
+
+            <path d="M330 180V232" />
+            <path d="M306 232H439" />
+            <path d="M306 232V270" />
+            <path d="M439 232V270" />
+
+            <path d="M548 180V232" />
+            <path d="M576 232H702" />
+            <path d="M576 232V270" />
+            <path d="M702 232V270" />
+
+            <path class="same-action" d="M210 318V372H702V318" />
+          </svg>
+
+          <button class="node root v-root" data-tip="供应链年度降本目标的总入口，向下拆解到头程、尾程、仓储、采购四类成本动作。">总降本</button>
+          <button class="node v-head" data-tip="商品从供应端发往海外仓或平台仓前段产生的物流成本，主要受物流方式结构、物流方式单价、发货量和库存控制影响。">头程成本</button>
+          <button class="node v-tail" data-tip="订单从海外仓发往消费者的配送成本，主要受尾程单价和订单区域分布影响。">尾程成本</button>
+          <button class="node v-ware" data-tip="库存存放期间产生的仓租成本，主要受仓租单价和库存控制影响。">仓储成本</button>
+          <button class="node v-purchase" data-tip="采购成本降低主要来自供应商协商、价格谈判、替代料或替代方案等采购动作，目前主要依赖采购工程师业务能力。">采购成本</button>
+
+          <button class="node clickable v-mode-structure" data-tip="不同头程物流方式的发货占比。低单价方式占比提升、高单价方式占比下降，会改善整体头程成本结构。">物流方式<br />结构</button>
+          <button class="node inventory clickable v-inventory-head" data-tip="通过发货前的安库策略和库存发出后的库龄推演，预判未来缺口与仓租风险，辅助库存决策。">库存控制</button>
+          <button class="node clickable v-tail-price" data-tip="订单尾程配送的单位成本。物流商管理、报价优化和服务商切换会影响不同 Zone 的尾程单价。">尾程单价</button>
+          <button class="node clickable v-order-dist" data-tip="通过预判订单区域分布，提高最优发货仓匹配度，使订单更靠近消费者，降低等待时间和尾程运费。">订单分布<br />预判准确度</button>
+          <button class="node v-rent-price" data-tip="物流商按货型和库龄分段设置仓租单价。货型越特殊、库龄越高，单价通常越高；当次仓租通常按观测期在库体积 × 对应单价计算。">仓租单价</button>
+          <button class="node inventory clickable v-inventory-ware" data-tip="同头程侧库存控制，是同一类动作在仓储成本中的体现。通过时序推演预判未来库龄和仓租风险。">库存控制</button>
+          <button class="node clickable v-mode-price" data-tip="不同头程物流方式的单位重量成本。固定发货结构后，可以单独观察渠道单价变化。">物流方式<br />单价</button>
+          <button class="node v-ship-volume" data-tip="头程费用的数量基础。发货量越大，物流方式结构和单价变化对总成本的影响越明显。">发货量</button>
+        </div>
+      </section>
+
+      <section class="panel" aria-label="供应链降本逻辑拆解">
+        <h2 class="panel-title">供应链降本逻辑拆解</h2>
+        <div class="graph horizontal">
+          <svg class="links" viewBox="0 0 830 660" aria-hidden="true">
+            <path d="M152 326H184" />
+            <path d="M184 106V556" />
+            <path d="M184 106H218" />
+            <path d="M184 256H218" />
+            <path d="M184 406H218" />
+            <path d="M184 556H218" />
+
+            <path d="M328 106H370" />
+            <path d="M370 60V152" />
+            <path d="M370 60H408" />
+            <path d="M370 152H408" />
+            <path d="M534 60H580" />
+            <path d="M580 38V106" />
+            <path d="M580 38H618" />
+            <path d="M580 106H618" />
+
+            <path d="M328 256H370" />
+            <path d="M370 232V316" />
+            <path d="M370 232H408" />
+            <path d="M370 316H408" />
+
+            <path d="M328 406H370" />
+            <path d="M370 390V482" />
+            <path d="M370 390H408" />
+            <path d="M370 482H408" />
+
+            <path class="same-action" d="M520 152H570V482H520" />
+          </svg>
+
+          <button class="node root h-root" data-tip="供应链年度降本目标的总入口，向下拆解到头程、尾程、仓储、采购四类成本动作。">总降本</button>
+          <button class="node h-head" data-tip="商品从供应端发往海外仓或平台仓前段产生的物流成本，主要受物流方式结构、物流方式单价、发货量和库存控制影响。">头程成本</button>
+          <button class="node h-tail" data-tip="订单从海外仓发往消费者的配送成本，主要受尾程单价和订单区域分布影响。">尾程成本</button>
+          <button class="node h-ware" data-tip="库存存放期间产生的仓租成本，主要受仓租单价和库存控制影响。">仓储成本</button>
+          <button class="node h-purchase" data-tip="采购成本降低主要来自供应商协商、价格谈判、替代料或替代方案等采购动作，目前主要依赖采购工程师业务能力。">采购成本</button>
+
+          <button class="node clickable h-mode-structure" data-tip="不同头程物流方式的发货占比。低单价方式占比提升、高单价方式占比下降，会改善整体头程成本结构。">物流方式<br />结构</button>
+          <button class="node inventory clickable h-inventory-head" data-tip="通过发货前的安库策略和库存发出后的库龄推演，预判未来缺口与仓租风险，辅助库存决策。">库存控制</button>
+          <button class="node clickable h-tail-price" data-tip="订单尾程配送的单位成本。物流商管理、报价优化和服务商切换会影响不同 Zone 的尾程单价。">尾程单价</button>
+          <button class="node clickable h-order-dist" data-tip="通过预判订单区域分布，提高最优发货仓匹配度，使订单更靠近消费者，降低等待时间和尾程运费。">订单分布<br />预判准确度</button>
+          <button class="node h-rent-price" data-tip="物流商按货型和库龄分段设置仓租单价。货型越特殊、库龄越高，单价通常越高；当次仓租通常按观测期在库体积 × 对应单价计算。">仓租单价</button>
+          <button class="node inventory clickable h-inventory-ware" data-tip="同头程侧库存控制，是同一类动作在仓储成本中的体现。通过时序推演预判未来库龄和仓租风险。">库存控制</button>
+          <button class="node clickable h-mode-price" data-tip="不同头程物流方式的单位重量成本。固定发货结构后，可以单独观察渠道单价变化。">物流方式<br />单价</button>
+          <button class="node h-ship-volume" data-tip="头程费用的数量基础。发货量越大，物流方式结构和单价变化对总成本的影响越明显。">发货量</button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

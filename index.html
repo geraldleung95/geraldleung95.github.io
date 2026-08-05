@@ -7,6 +7,7 @@
       name="description"
       content="Gerald Leung - AI tools, workflow automation, and FDE practice."
     />
+    <meta name="robots" content="noindex, nofollow" />
     <title>Gerald Leung</title>
     <style>
       :root {
@@ -66,6 +67,7 @@
         font-size: 19px;
         font-weight: 800;
         letter-spacing: 0;
+        white-space: nowrap;
       }
 
       .site-nav {
@@ -73,6 +75,10 @@
         gap: 22px;
         font-size: 18px;
         font-weight: 700;
+      }
+
+      .site-nav a {
+        white-space: nowrap;
       }
 
       .site-nav a:hover {
@@ -277,28 +283,99 @@
         line-height: 1;
       }
 
-      .featured-project {
+      .portfolio-grid {
         display: grid;
-        grid-template-columns: minmax(0, 0.96fr) minmax(440px, 1.04fr);
-        gap: 44px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: clamp(18px, 2.2vw, 30px);
+        align-items: stretch;
+      }
+
+      .portfolio-card {
+        display: grid;
+        grid-template-columns: minmax(190px, 0.92fr) minmax(0, 1.08fr);
+        gap: clamp(20px, 2.2vw, 34px);
         align-items: center;
-        padding: 28px 0;
+        min-height: 266px;
+        padding: 22px 0;
         border-top: 2px solid rgba(245, 242, 255, 0.58);
         border-bottom: 2px solid rgba(245, 242, 255, 0.58);
       }
 
-      .project-copy h3 {
-        max-width: 620px;
-        font-size: clamp(34px, 4vw, 60px);
-        line-height: 1.02;
+      .portfolio-card h3 {
+        margin-bottom: 14px;
+        font-size: clamp(28px, 2.05vw, 39px);
+        line-height: 1.05;
       }
 
-      .project-summary {
-        max-width: 510px;
-        margin: 24px 0 32px;
-        font-size: 18px;
-        line-height: 1.55;
+      .portfolio-card p {
+        max-width: 440px;
         color: var(--paper);
+        font-size: 16.5px;
+        font-weight: 650;
+        line-height: 1.5;
+      }
+
+      .portfolio-figure {
+        display: grid;
+        place-items: center;
+        min-height: 190px;
+        border: 1px solid rgba(245, 242, 255, 0.42);
+        background: rgba(245, 242, 255, 0.02);
+      }
+
+      .portfolio-figure.empty {
+        background: transparent;
+      }
+
+      .portfolio-figure svg {
+        display: block;
+        width: min(82%, 250px);
+        height: auto;
+        overflow: visible;
+      }
+
+      .portfolio-figure img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        max-height: 190px;
+        object-fit: contain;
+      }
+
+      .portfolio-figure .line {
+        fill: none;
+        stroke: var(--lavender);
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .portfolio-figure .thin {
+        fill: none;
+        stroke: rgba(245, 242, 255, 0.52);
+        stroke-width: 3;
+      }
+
+      .portfolio-figure .block {
+        fill: var(--coral);
+        stroke: var(--paper);
+        stroke-width: 3;
+      }
+
+      .portfolio-figure .dot {
+        fill: var(--lime);
+        stroke: var(--ink);
+        stroke-width: 3;
+      }
+
+      .portfolio-card-action {
+        display: inline-flex;
+        align-items: center;
+        margin-top: 18px;
+        border-bottom: 2px solid var(--lavender);
+        color: var(--lavender);
+        font-size: 13px;
+        font-weight: 800;
       }
 
       .project-facts {
@@ -492,7 +569,13 @@
         }
 
         .site-nav {
-          gap: 14px;
+          gap: 10px;
+          font-size: 13px;
+        }
+
+        #work,
+        #flywheel {
+          scroll-margin-top: 64px;
         }
 
         .hero,
@@ -557,16 +640,20 @@
           flex-basis: 44px;
         }
 
-        .featured-project,
+        .portfolio-grid,
         .flywheel-stage {
           grid-template-columns: 1fr;
         }
 
-        .featured-project {
-          gap: 30px;
+        .portfolio-card {
+          grid-template-columns: 1fr;
+          gap: 20px;
+          min-height: 0;
+          padding: 28px 0;
         }
 
-        .project-preview {
+        .portfolio-figure {
+          min-height: 164px;
           order: -1;
         }
 
@@ -640,28 +727,25 @@
         }
 
         .work .section-heading {
-          max-width: 900px;
+          max-width: none;
           margin: 0;
         }
 
         .work .section-heading h2 {
-          font-size: clamp(48px, 4.35vw, 76px);
+          font-size: clamp(42px, 3.6vw, 68px);
           line-height: 1.05;
+          white-space: nowrap;
         }
 
-        .featured-project {
-          grid-template-columns: minmax(390px, 0.76fr) minmax(650px, 1.24fr);
-          align-items: center;
-          gap: clamp(50px, 6vw, 112px);
-          padding: 32px 0;
+        .portfolio-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: clamp(18px, 2vw, 30px);
+          align-items: stretch;
         }
 
-        .project-copy h3 { font-size: clamp(44px, 4vw, 68px); }
-
-        .project-summary {
-          max-width: 500px;
-          margin: 26px 0 34px;
-          font-size: 19px;
+        .portfolio-card {
+          display: grid;
+          align-content: stretch;
         }
 
         .flywheel {
@@ -735,13 +819,370 @@
           transform: translateX(72px);
         }
       }
+
+      .work-intro {
+        display: grid;
+        gap: 28px;
+        align-items: center;
+      }
+
+      .section-heading .kicker {
+        display: block;
+        margin-bottom: 12px;
+        color: var(--lavender);
+        font-size: 20px;
+        line-height: 1;
+      }
+
+      .framework-panel {
+        display: grid;
+        gap: 20px;
+        align-items: center;
+      }
+
+      .mini-matrix {
+        position: relative;
+        width: 190px;
+        height: 138px;
+        border: 1px solid rgba(245, 242, 255, 0.44);
+        background: rgba(245, 242, 255, 0.018);
+      }
+
+      .mini-matrix::before,
+      .mini-matrix::after {
+        content: "";
+        position: absolute;
+        background: rgba(176, 145, 243, 0.76);
+      }
+
+      .mini-matrix::before {
+        left: 50%;
+        top: 14px;
+        bottom: 14px;
+        width: 3px;
+        transform: translateX(-50%);
+      }
+
+      .mini-matrix::after {
+        left: 14px;
+        right: 14px;
+        top: 50%;
+        height: 3px;
+        transform: translateY(-50%);
+      }
+
+      .axis-chip {
+        position: absolute;
+        z-index: 1;
+        display: grid;
+        place-items: center;
+        min-width: 42px;
+        height: 22px;
+        padding: 0 8px;
+        border-radius: 4px;
+        background: var(--lavender);
+        color: var(--ink);
+        font-size: 14px;
+        line-height: 1;
+      }
+
+      .axis-chip.left { left: 13px; top: 58px; }
+      .axis-chip.right { right: 13px; top: 58px; }
+      .axis-chip.top { left: 50%; top: 10px; transform: translateX(-50%); }
+      .axis-chip.bottom { left: 50%; bottom: 10px; transform: translateX(-50%); }
+
+      .framework-notes {
+        display: grid;
+        gap: 9px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        color: var(--paper);
+        font-size: 17px;
+        line-height: 1.48;
+      }
+
+      .framework-notes li {
+        position: relative;
+        padding-left: 18px;
+      }
+
+      .framework-notes li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.62em;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--lavender);
+        transform: translateY(-50%);
+      }
+
+      .portfolio-axis-stage {
+        position: relative;
+      }
+
+      .portfolio-figure {
+        overflow: hidden;
+        transition:
+          border-color 180ms ease,
+          background 180ms ease;
+      }
+
+      .portfolio-figure img {
+        transition:
+          filter 180ms ease,
+          transform 180ms ease;
+      }
+
+      a.portfolio-figure:hover,
+      a.portfolio-figure:focus-visible {
+        border-color: rgba(176, 145, 243, 0.92);
+        background: rgba(176, 145, 243, 0.08);
+        outline: none;
+      }
+
+      a.portfolio-figure:hover img,
+      a.portfolio-figure:focus-visible img {
+        filter: brightness(1.12);
+        transform: scale(1.015);
+      }
+
+      .portfolio-figure.empty {
+        pointer-events: none;
+      }
+
+      .axis-horizontal,
+      .axis-vertical,
+      .quadrant-tag {
+        display: none;
+      }
+
+      @media (max-width: 780px) {
+        .work-intro {
+          grid-template-columns: 1fr;
+        }
+
+        .framework-panel {
+          grid-template-columns: 1fr;
+        }
+
+        .mini-matrix {
+          width: min(100%, 260px);
+        }
+
+        .framework-notes {
+          font-size: 14px;
+          line-height: 1.45;
+        }
+
+        .work .section-heading h2 {
+          white-space: normal;
+        }
+
+        .portfolio-axis-stage {
+          display: block;
+        }
+
+        .portfolio-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+      }
+
+      @media (min-width: 781px) {
+        .work {
+          gap: 22px;
+        }
+
+        .work-intro {
+          grid-template-columns: minmax(560px, 0.42fr) minmax(900px, 0.58fr);
+          gap: 34px;
+        }
+
+        .work .section-heading h2 {
+          font-size: clamp(46px, 3vw, 58px);
+          line-height: 1.04;
+          white-space: nowrap;
+        }
+
+        .framework-panel {
+          grid-template-columns: 216px minmax(0, 1fr);
+          gap: 64px;
+          min-height: 138px;
+        }
+
+        .mini-matrix {
+          justify-self: end;
+        }
+
+        .framework-notes li {
+          white-space: nowrap;
+        }
+
+        .portfolio-axis-stage {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) 132px minmax(0, 1fr);
+          grid-template-rows: minmax(0, 1fr) 96px minmax(0, 1fr);
+          min-height: 0;
+        }
+
+        .portfolio-grid {
+          display: contents;
+        }
+
+        .portfolio-card {
+          grid-template-columns: minmax(260px, 1fr) minmax(0, 1fr);
+          gap: clamp(18px, 1.8vw, 30px);
+          min-height: 270px;
+          padding: 15px 0;
+          border-top: 0;
+          border-bottom: 0;
+          background: var(--ink);
+        }
+
+        .portfolio-card:nth-child(1) { grid-column: 1; grid-row: 1; }
+        .portfolio-card:nth-child(2) { grid-column: 3; grid-row: 1; }
+        .portfolio-card:nth-child(3) { grid-column: 1; grid-row: 3; }
+        .portfolio-card:nth-child(4) { grid-column: 3; grid-row: 3; }
+
+        .portfolio-figure {
+          min-height: 210px;
+        }
+
+        .portfolio-figure img {
+          max-height: 226px;
+        }
+
+        .portfolio-figure .supply-cost-art {
+          width: 100%;
+          max-width: none;
+        }
+
+        .portfolio-card h3 {
+          margin-bottom: 12px;
+          font-size: clamp(25px, 1.7vw, 33px);
+          line-height: 1.08;
+        }
+
+        .portfolio-card p {
+          max-width: 450px;
+          font-size: 17px;
+          line-height: 1.42;
+        }
+
+        .axis-horizontal,
+        .axis-vertical {
+          position: relative;
+          z-index: 2;
+          display: block;
+          color: rgba(176, 145, 243, 0.92);
+          pointer-events: none;
+        }
+
+        .axis-horizontal {
+          grid-column: 1 / 4;
+          grid-row: 2;
+          align-self: center;
+          height: 96px;
+        }
+
+        .axis-vertical {
+          grid-column: 2;
+          grid-row: 1 / 4;
+          justify-self: center;
+          width: 132px;
+        }
+
+        .axis-horizontal svg,
+        .axis-vertical svg {
+          position: absolute;
+          inset: 0;
+          display: block;
+          width: 100%;
+          height: 100%;
+          filter: drop-shadow(0 0 14px rgba(176, 145, 243, 0.24));
+        }
+
+        .axis-shape {
+          fill: currentColor;
+        }
+
+        .axis-label {
+          position: absolute;
+          z-index: 3;
+          display: grid;
+          place-items: center;
+          color: var(--ink);
+          font-size: 23px;
+          line-height: 1;
+          letter-spacing: 0;
+          white-space: nowrap;
+        }
+
+        .axis-label.x-left {
+          left: calc(14% - 24px);
+          top: 36px;
+        }
+
+        .axis-label.x-right {
+          right: calc(14% - 24px);
+          top: 36px;
+        }
+
+        .axis-label.y-top {
+          top: calc(14% - 28px);
+          left: 54px;
+          writing-mode: vertical-rl;
+        }
+
+        .axis-label.y-bottom {
+          bottom: calc(14% - 28px);
+          left: 54px;
+          writing-mode: vertical-rl;
+        }
+
+        .quadrant-tag {
+          position: absolute;
+          z-index: 1;
+          display: block;
+          color: rgba(245, 242, 255, 0.36);
+          font-size: 20px;
+          line-height: 1;
+          letter-spacing: 0;
+          white-space: nowrap;
+          pointer-events: none;
+        }
+
+        .quadrant-tag.tl {
+          right: calc(50% + 72px);
+          top: calc(50% - 78px);
+        }
+
+        .quadrant-tag.tr {
+          left: calc(50% + 72px);
+          top: calc(50% - 78px);
+        }
+
+        .quadrant-tag.bl {
+          right: calc(50% + 72px);
+          bottom: calc(50% - 78px);
+        }
+
+        .quadrant-tag.br {
+          left: calc(50% + 72px);
+          bottom: calc(50% - 78px);
+        }
+      }
     </style>
   </head>
   <body>
     <header class="site-header">
       <a class="wordmark" href="#top">GERALD LEUNG</a>
       <nav class="site-nav" aria-label="页面导航">
-        <a href="#work">项目</a>
+        <a href="#work">作品集</a>
         <a href="#flywheel">价值飞轮</a>
         <a href="https://github.com/geraldleung95" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
@@ -775,24 +1216,86 @@
       </section>
 
       <section class="work" id="work" aria-labelledby="work-title">
-        <div class="section-heading">
-          <h2 id="work-title">把头程发货从经验判断，变成可推演的决策。</h2>
+        <div class="work-intro">
+          <div class="section-heading">
+            <span class="kicker">我的作品集</span>
+            <h2 id="work-title">供应链问题的四类求解范式</h2>
+          </div>
+          <div class="framework-panel" aria-label="供应链问题求解四象限模型">
+            <div class="mini-matrix" aria-hidden="true">
+              <span class="axis-chip left">分解</span>
+              <span class="axis-chip right">耦合</span>
+              <span class="axis-chip top">解释</span>
+              <span class="axis-chip bottom">推演</span>
+            </div>
+            <ul class="framework-notes">
+              <li>供应链问题求解四象限，用来解释四个案例背后的范式差异。</li>
+              <li>横轴表示问题结构：分解强调拆清目标与因子，耦合强调一个变量牵动多方结果。</li>
+              <li>纵轴表示求解方式：解释用于对齐事实口径与问题判断，推演用于预判未来并辅助决策。</li>
+              <li>两条轴交叉组合，形成四类供应链问题的可运行解法。</li>
+            </ul>
+          </div>
         </div>
 
-        <article class="featured-project">
-          <div class="project-copy">
-            <h3>头程发货<br />测算推演</h3>
-            <p class="project-summary">将销售预测、库存、在途、物流时效与区域仓分配放入同一个交互工作台，让每次发货决策都能看到约束、选择与结果。</p>
-            <div class="project-actions">
-              <a class="button-link primary" href="demos/supply-planning/forecast_main.html" target="_blank" rel="noreferrer">进入推演工作台</a>
-            </div>
+        <div class="portfolio-axis-stage">
+          <span class="quadrant-tag tl">分解×解释</span>
+          <span class="quadrant-tag tr">耦合×解释</span>
+          <span class="quadrant-tag bl">分解×推演</span>
+          <span class="quadrant-tag br">耦合×推演</span>
+
+          <div class="axis-horizontal" aria-hidden="true">
+            <svg viewBox="0 0 1000 96" preserveAspectRatio="none">
+              <polygon class="axis-shape" points="0,48 42,9 42,24 958,24 958,9 1000,48 958,87 958,72 42,72 42,87" />
+            </svg>
+            <span class="axis-label x-left">分解</span>
+            <span class="axis-label x-right">耦合</span>
           </div>
-          <a class="project-preview" href="demos/supply-planning/forecast_main.html" target="_blank" rel="noreferrer">
-            <figure>
-              <img src="assets/supply-planning-abstract.svg?v=20260803" alt="头程发货测算推演的库存与发货决策图" />
-            </figure>
-          </a>
-        </article>
+          <div class="axis-vertical" aria-hidden="true">
+            <svg viewBox="0 0 132 1000" preserveAspectRatio="none">
+              <polygon class="axis-shape" points="66,0 118,52 92,52 92,948 118,948 66,1000 14,948 40,948 40,52 14,52" />
+            </svg>
+            <span class="axis-label y-top">解释</span>
+            <span class="axis-label y-bottom">推演</span>
+          </div>
+
+          <div class="portfolio-grid">
+            <article class="portfolio-card">
+              <a class="portfolio-figure" href="demos/supply-cost/" target="_blank" rel="noreferrer">
+                <img class="supply-cost-art" src="assets/supply-cost-breakdown.svg?v=20260805" alt="供应链降本逻辑拆解图" />
+              </a>
+              <div class="portfolio-copy">
+                <h3>供应链降本：</h3>
+                <p>年度降本目标如何拆到费用、动作与指标，形成可观测、可归因的降本路径？</p>
+              </div>
+            </article>
+
+            <article class="portfolio-card">
+              <div class="portfolio-figure empty" aria-hidden="true"></div>
+              <div class="portfolio-copy">
+                <h3>海外衔接：</h3>
+                <p>多角色围绕同一事实底表推进时，如何按各自视角识别风险、判断责任并协同跟进？</p>
+              </div>
+            </article>
+
+            <article class="portfolio-card">
+              <div class="portfolio-figure">
+                <img src="assets/supply-planning-abstract.svg?v=20260803" alt="库存控制专项解决方案图" />
+              </div>
+              <div class="portfolio-copy">
+                <h3>库存控制：</h3>
+                <p>如何用同一套时序推演预判发货缺口与仓租风险，再转化为库存决策依据？</p>
+              </div>
+            </article>
+
+            <article class="portfolio-card">
+              <div class="portfolio-figure empty" aria-hidden="true"></div>
+              <div class="portfolio-copy">
+                <h3>预计到货日期：</h3>
+                <p>一个关键日期如何牵动成本与履约，并在多约束下用近似优化逼近更优解？</p>
+              </div>
+            </article>
+          </div>
+        </div>
       </section>
 
       <section class="flywheel" id="flywheel" aria-labelledby="flywheel-title">
