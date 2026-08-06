@@ -1,0 +1,253 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>海外衔接协作工具</title>
+    <meta name="application-name" content="海外衔接协作工具">
+    <meta name="apple-mobile-web-app-title" content="海外衔接协作工具">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="海外衔接协作工具">
+    <meta property="og:site_name" content="海外衔接协作工具">
+    <meta property="og:description" content="海外衔接协作工具">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="海外衔接协作工具">
+    <meta name="twitter:description" content="海外衔接协作工具">
+    <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="title-block">
+          <p class="eyebrow">Overseas Handoff</p>
+          <h1>海外衔接协作工具</h1>
+          <div class="top-filter-host" id="top-filter-host" hidden></div>
+          <div class="identity-row">
+            <button id="identity-trigger" class="identity-trigger" type="button" aria-expanded="false" aria-controls="identity-panel">
+              <span>当前用户</span>
+              <strong id="identity-current">选择用户 / 角色</strong>
+            </button>
+            <div class="top-public-filters" id="top-public-filters">
+              <div id="week-range-filter" class="week-range-filter" aria-label="风险周范围"></div>
+              <div id="currency-dropdown" class="currency-dropdown" aria-label="金额币种"></div>
+              <select id="currency-select" class="currency-select" aria-label="金额币种" hidden></select>
+            </div>
+            <button id="manual-btn" class="top-btn" type="button">使用说明</button>
+            <button id="export-btn" class="top-btn" type="button">提交导出</button>
+            <button id="export-tasks-btn" class="top-btn" type="button">我的导出</button>
+            <span id="snapshot-time" class="snapshot-time">最近更新 --</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="summary-pane">
+          <div class="pane-head">
+            <div class="summary-head-main">
+              <h2 id="summary-title">角色首页</h2>
+              <p id="scope-text" class="subtle">FBA正式范围</p>
+            </div>
+            <div class="summary-head-actions">
+              <div class="subject-filter-host" id="subject-filter-host" hidden></div>
+              <span id="summary-count" class="counter">0</span>
+            </div>
+          </div>
+          <div class="kpi-grid" id="kpi-grid"></div>
+          <div class="summary-list-toolbar" id="summary-list-toolbar" hidden></div>
+          <div class="summary-list" id="summary-list"></div>
+        </section>
+
+        <section class="logistics-channel-pane" id="logistics-channel-pane" hidden>
+          <div class="pane-head">
+            <div>
+              <h2>② 渠道清单</h2>
+            </div>
+            <button class="ghost-btn" id="logistics-channel-toggle" type="button">全部收起</button>
+          </div>
+          <div class="logistics-channel-tree" id="logistics-channel-tree"></div>
+        </section>
+
+        <section class="detail-pane">
+          <div class="pane-head">
+            <div>
+              <h2 id="detail-title">风险卡片</h2>
+              <p id="detail-meta" class="subtle">选择左侧摘要查看明细</p>
+            </div>
+            <div class="pane-actions">
+              <span id="card-count" class="counter">0</span>
+            </div>
+          </div>
+
+          <div class="filters filters-collapsed" id="filters">
+            <button id="filter-toggle" class="filter-toggle" type="button" aria-expanded="false" aria-controls="filter-panel">展开筛选</button>
+            <div id="filter-summary" class="filter-summary"></div>
+            <section id="filter-panel" class="filter-panel" aria-label="明细筛选">
+              <div class="filter-panel-head">
+                <div>
+                  <strong>筛选</strong>
+                </div>
+                <button id="filter-clear-head" class="ghost-btn filter-clear-head" type="button">清空全部</button>
+                <button id="filter-collapse" class="ghost-btn" type="button">收起</button>
+              </div>
+              <div class="filter-panel-body">
+                <section class="filter-section filter-batch-section">
+                  <strong class="filter-section-title">批量查询</strong>
+                  <div class="filter-batch-grid">
+                <label class="filter-field">
+                  <span>销售链接</span>
+                  <textarea id="sales-link-filter" rows="2" placeholder="换行、逗号、空格分隔"></textarea>
+                </label>
+                <label class="filter-field">
+                  <span>系统SKU</span>
+                  <textarea id="system-sku-filter" rows="2" placeholder="换行、逗号、空格分隔"></textarea>
+                </label>
+                <label class="filter-field">
+                  <span>货件号</span>
+                  <textarea id="shipment-no-filter" rows="2" placeholder="例如 FBA15G966K9V"></textarea>
+                </label>
+                <label class="filter-field">
+                  <span>平台SKU</span>
+                  <textarea id="platform-sku-filter" rows="2" placeholder="换行、逗号、空格分隔"></textarea>
+                </label>
+              </div>
+                </section>
+                <section class="filter-section filter-cascade-section">
+                  <strong class="filter-section-title">级联字段</strong>
+                  <div id="cascade-filter-host" class="cascade-filter-host"></div>
+                </section>
+                <section class="filter-section filter-multi-section">
+                  <strong class="filter-section-title">普通多选</strong>
+                  <div id="multi-filter-host" class="multi-filter-host"></div>
+                </section>
+              </div>
+              <div id="filter-clear-confirm" class="filter-clear-confirm" hidden>
+                <span>确认清空当前筛选条件？</span>
+                <div>
+                  <button id="filter-clear-cancel" class="ghost-btn compact" type="button">取消</button>
+                  <button id="filter-clear-confirm-btn" class="primary-btn compact" type="button">确认清空</button>
+                </div>
+              </div>
+              <div class="filter-actions">
+                <button id="filter-close" class="ghost-btn filter-close-btn" type="button">关闭</button>
+                <button id="filter-apply" class="primary-btn" type="button">应用筛选</button>
+              </div>
+            </section>
+          </div>
+
+          <div id="detail-body" class="detail-body">
+            <section id="link-overview" class="link-overview" hidden></section>
+
+            <section id="issue-insights" class="issue-insights" hidden></section>
+
+            <div id="cards-empty" class="empty-state" hidden>暂无可展示明细</div>
+            <div class="risk-list" id="risk-list"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="identity-backdrop" class="identity-backdrop" hidden></div>
+    <section class="identity-panel" id="identity-panel" role="dialog" aria-modal="true" aria-labelledby="identity-panel-title" hidden>
+      <div class="identity-panel-head">
+        <div>
+          <p class="eyebrow">Identity</p>
+          <h2 id="identity-panel-title">切换用户与角色</h2>
+        </div>
+        <button id="identity-close" class="icon-btn" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="identity-body">
+        <div class="user-picker">
+          <label for="user-search">用户</label>
+          <input id="user-search" type="search" autocomplete="off" placeholder="输入中文名、英文名或角色">
+          <div id="user-results" class="user-results" hidden></div>
+        </div>
+        <div>
+          <label>角色</label>
+          <div class="role-switch" id="role-switch" aria-label="角色"></div>
+        </div>
+        <section class="identity-role-card" hidden>
+          <div>
+            <span>首页颗粒度</span>
+            <strong id="identity-grain">--</strong>
+          </div>
+          <div>
+            <span>权限范围</span>
+            <strong id="identity-scope">--</strong>
+          </div>
+          <div>
+            <span>下钻路径</span>
+            <strong id="identity-drill">--</strong>
+          </div>
+          <div>
+            <span>导出上限</span>
+            <strong id="identity-export">--</strong>
+          </div>
+        </section>
+        <p id="identity-draft-text" class="identity-draft-text" hidden></p>
+        <div class="identity-actions">
+          <button id="identity-cancel" class="ghost-btn" type="button">取消</button>
+          <button id="identity-confirm" class="primary-btn" type="button">确认变更</button>
+        </div>
+      </div>
+    </section>
+
+    <aside class="comment-panel" id="comment-panel" hidden>
+      <div class="comment-head">
+        <div>
+          <p class="eyebrow">Shipment</p>
+          <h2 id="comment-title">--</h2>
+        </div>
+        <button id="comment-close" class="icon-btn" type="button" aria-label="关闭">×</button>
+      </div>
+      <div id="comment-list" class="comment-list"></div>
+      <div class="comment-actions">
+        <textarea id="comment-input" rows="4" placeholder="补充当前处理进展、异常原因或需要对方确认的信息"></textarea>
+        <div class="comment-buttons">
+          <button id="confirm-read-btn" class="ghost-btn" type="button">确认已读</button>
+          <button id="post-comment-btn" class="primary-btn" type="button">提交留言</button>
+        </div>
+      </div>
+    </aside>
+
+    <aside class="manual-panel" id="manual-panel" hidden>
+      <div class="manual-head">
+        <div>
+          <p class="eyebrow">Role Guide</p>
+          <h2 id="manual-title">使用说明</h2>
+        </div>
+        <button id="manual-close" class="icon-btn" type="button" aria-label="关闭">×</button>
+        </div>
+        <div class="manual-body">
+          <section class="manual-section">
+            <h3>分析目标</h3>
+            <p id="manual-role-summary"></p>
+          </section>
+          <section class="manual-section">
+            <h3>判断顺序</h3>
+            <ol id="manual-steps" class="manual-list"></ol>
+          </section>
+          <section class="manual-section">
+            <h3>行动规则</h3>
+            <ul id="manual-notes" class="manual-list"></ul>
+          </section>
+      </div>
+    </aside>
+
+    <aside class="export-panel" id="export-panel" hidden>
+      <div class="export-head">
+        <div>
+          <p class="eyebrow">Exports</p>
+          <h2>我的导出任务</h2>
+        </div>
+        <button id="export-close" class="icon-btn" type="button" aria-label="关闭">×</button>
+      </div>
+      <div id="export-list" class="export-list"></div>
+    </aside>
+
+    <div id="toast" class="toast" hidden></div>
+  <script src="assets/mock-api.js"></script>
+  <script src="assets/app.js"></script>
+  </body>
+</html>
+

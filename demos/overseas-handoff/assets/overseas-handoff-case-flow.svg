@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="760" viewBox="0 0 960 760" role="img" aria-labelledby="title desc">
+  <title id="title">海外衔接案例说明页信息流预览</title>
+  <desc id="desc">事实底表分发到计划、运营、物流三个角色工作台，并通过物流反馈、运营读取和留言沉淀完成流程内同频。</desc>
+  <rect width="960" height="760" fill="#121119"/>
+
+  <defs>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity=".38"/>
+    </filter>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#b091f3"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#5797ff"/>
+    </marker>
+    <marker id="arrowOld" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#777182"/>
+    </marker>
+  </defs>
+
+  <g font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-weight="800" letter-spacing="0">
+    <text x="54" y="70" fill="#f5f2ff" font-size="34">从点对点追问到流程内同频</text>
+    <text x="55" y="103" fill="#b091f3" font-size="16">同一事实底表，被拆成计划、运营、物流各自需要的行动视角。</text>
+  </g>
+  <path d="M54 134H906" stroke="#f5f2ff" stroke-opacity=".18"/>
+
+  <g transform="translate(58 206)" filter="url(#shadow)">
+    <rect x="0" y="0" width="318" height="324" rx="10" fill="#17151f" stroke="#5797ff" stroke-opacity=".42"/>
+    <g font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-weight="800">
+      <text x="28" y="42" fill="#f5f2ff" font-size="24">事实底表</text>
+      <text x="28" y="70" fill="#5797ff" font-size="14">所有角色共享同一组风险事实</text>
+    </g>
+
+    <g stroke="#f5f2ff" stroke-opacity=".13" stroke-width="1">
+      <path d="M28 104H290"/>
+      <path d="M28 154H290"/>
+      <path d="M28 204H290"/>
+      <path d="M28 254H290"/>
+      <path d="M112 96V266"/>
+      <path d="M182 96V266"/>
+      <path d="M244 96V266"/>
+    </g>
+
+    <g font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-weight="800" fill="#9f92d9" font-size="12">
+      <text x="28" y="94">销售链接</text>
+      <text x="112" y="94">货件节点</text>
+      <text x="182" y="94">缺口周次</text>
+      <text x="244" y="94">反馈状态</text>
+    </g>
+
+    <g filter="url(#glow)">
+      <rect x="32" y="122" width="54" height="11" rx="3" fill="#ff89c2"/>
+      <rect x="122" y="122" width="42" height="11" rx="3" fill="#5797ff"/>
+      <rect x="195" y="122" width="30" height="11" rx="3" fill="#ffa95c"/>
+      <rect x="255" y="122" width="24" height="11" rx="3" fill="#cef26a"/>
+      <rect x="32" y="172" width="72" height="11" rx="3" fill="#ff89c2" opacity=".76"/>
+      <rect x="122" y="172" width="34" height="11" rx="3" fill="#5797ff" opacity=".76"/>
+      <rect x="195" y="172" width="42" height="11" rx="3" fill="#ffa95c"/>
+      <rect x="255" y="172" width="24" height="11" rx="3" fill="#ff89c2"/>
+      <rect x="32" y="222" width="44" height="11" rx="3" fill="#b091f3"/>
+      <rect x="122" y="222" width="58" height="11" rx="3" fill="#5797ff"/>
+      <rect x="195" y="222" width="28" height="11" rx="3" fill="#ffa95c" opacity=".78"/>
+      <rect x="255" y="222" width="24" height="11" rx="3" fill="#cef26a"/>
+    </g>
+
+    <g font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-weight="800" font-size="13">
+      <rect x="28" y="282" width="86" height="22" rx="5" fill="#111820" stroke="#f5f2ff" stroke-opacity=".14"/>
+      <text x="42" y="298" fill="#9f92d9">风险排序</text>
+      <rect x="124" y="282" width="86" height="22" rx="5" fill="#111820" stroke="#f5f2ff" stroke-opacity=".14"/>
+      <text x="138" y="298" fill="#9f92d9">权限过滤</text>
+      <rect x="220" y="282" width="70" height="22" rx="5" fill="#111820" stroke="#f5f2ff" stroke-opacity=".14"/>
+      <text x="234" y="298" fill="#9f92d9">状态沉淀</text>
+    </g>
+  </g>
+
+  <g fill="none" stroke="#b091f3" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowPurple)">
+    <path d="M376 270C425 238 476 212 528 212"/>
+    <path d="M376 368C426 352 477 359 528 359"/>
+    <path d="M376 466C426 514 477 506 528 506"/>
+  </g>
+
+  <g filter="url(#shadow)" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-weight="800">
+    <g transform="translate(536 170)">
+      <rect x="0" y="0" width="344" height="84" rx="10" fill="#17151f" stroke="#b091f3" stroke-opacity=".46"/>
+      <text x="24" y="35" fill="#f5f2ff" font-size="24">计划</text>
+      <text x="24" y="63" fill="#9f92d9" font-size="14">看缺口周次，确定风险排序。</text>
+      <path d="M204 58L226 46L248 53L276 28L306 40" fill="none" stroke="#b091f3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="222" y="46" width="9" height="12" fill="#5797ff"/>
+      <rect x="272" y="28" width="9" height="30" fill="#5797ff"/>
+      <rect x="302" y="40" width="9" height="18" fill="#ffa95c"/>
+    </g>
+
+    <g transform="translate(536 317)">
+      <rect x="0" y="0" width="344" height="84" rx="10" fill="#17151f" stroke="#f5f2ff" stroke-opacity=".26"/>
+      <text x="24" y="35" fill="#f5f2ff" font-size="24">运营</text>
+      <text x="24" y="63" fill="#9f92d9" font-size="14">读链接风险，判断销售窗口。</text>
+      <rect x="210" y="25" width="94" height="10" rx="3" fill="#ff89c2"/>
+      <rect x="210" y="52" width="58" height="10" rx="3" fill="#cef26a"/>
+    </g>
+
+    <g transform="translate(536 464)">
+      <rect x="0" y="0" width="344" height="84" rx="10" fill="#17151f" stroke="#f5f2ff" stroke-opacity=".26"/>
+      <text x="24" y="35" fill="#f5f2ff" font-size="24">物流</text>
+      <text x="24" y="63" fill="#9f92d9" font-size="14">填节点反馈和可提前天数。</text>
+      <rect x="210" y="24" width="42" height="10" rx="3" fill="#5797ff"/>
+      <rect x="258" y="24" width="50" height="10" rx="3" fill="#5797ff" opacity=".72"/>
+      <rect x="210" y="52" width="78" height="10" rx="3" fill="#ff89c2" opacity=".75"/>
+      <rect x="296" y="52" width="24" height="10" rx="3" fill="#cef26a"/>
+    </g>
+  </g>
+
+  <g font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-weight="800">
+    <path d="M660 452V412" fill="none" stroke="#777182" stroke-opacity=".55" stroke-width="3" stroke-dasharray="8 10" stroke-linecap="round" marker-end="url(#arrowOld)"/>
+    <path d="M798 412V452" fill="none" stroke="#777182" stroke-opacity=".55" stroke-width="3" stroke-dasharray="8 10" stroke-linecap="round" marker-end="url(#arrowOld)"/>
+    <text x="687" y="435" fill="#777182" font-size="13">旧：反复询问</text>
+  </g>
+
+  <path d="M804 548C736 624 486 628 304 530" fill="none" stroke="#5797ff" stroke-width="4" stroke-dasharray="10 11" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrowBlue)" opacity=".82"/>
+
+  <g transform="translate(336 622)" font-family="Inter, Segoe UI, Microsoft YaHei, sans-serif" font-weight="800">
+    <rect x="0" y="0" width="418" height="46" rx="8" fill="#111820" stroke="#5797ff" stroke-opacity=".48"/>
+    <text x="24" y="29" fill="#5797ff" font-size="16">流程内同频：物流反馈 / 运营读取 / 留言沉淀</text>
+  </g>
+</svg>
