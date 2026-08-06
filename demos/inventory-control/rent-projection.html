@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>库存仓租推演 | Gerald Leung</title>
+    <style>
+      :root {
+        --bg: #0d1117;
+        --surface: #151c25;
+        --panel: #1b2530;
+        --field: #101720;
+        --line: #2b3a49;
+        --text: #eef3f8;
+        --muted: #99aaba;
+        --accent: #b091f3;
+        --accent-strong: #c5aeff;
+        --young: #079900;
+        --mid: #ffc94a;
+        --old-early: #f28c34;
+        --old-late: #ff1010;
+        --aged: #860000;
+        --rent: #b091f3;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-width: 1180px;
+        background: var(--bg);
+        color: var(--text);
+        font: 14px "Microsoft YaHei", "Segoe UI", sans-serif;
+      }
+
+      button { font: inherit; }
+
+      .app {
+        height: 100vh;
+        overflow: hidden;
+        padding: 14px 24px 16px;
+      }
+
+      .topbar {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 24px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h1, h2, h3, p { margin: 0; }
+
+      h1 {
+        font-size: 25px;
+        line-height: 1;
+        letter-spacing: 0;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 8px;
+      }
+
+      .summary .tabs {
+        width: 100%;
+      }
+
+      .summary .tab {
+        flex: 1;
+      }
+
+      .tab {
+        min-width: 88px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 8px 16px;
+        color: var(--muted);
+        background: var(--field);
+        cursor: pointer;
+      }
+
+      .tab[aria-selected="true"] {
+        border-color: rgba(176, 145, 243, 0.72);
+        color: var(--text);
+        background: rgba(176, 145, 243, 0.14);
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 468px minmax(0, 1fr);
+        gap: 12px;
+        height: calc(100vh - 72px);
+        min-height: 0;
+        margin-top: 12px;
+      }
+
+      .panel {
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--surface);
+      }
+
+      .left {
+        display: grid;
+        grid-template-rows: auto auto auto;
+        gap: 4px;
+        padding: 14px;
+      }
+
+      .section {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--panel);
+      }
+
+      .summary {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+      }
+
+      .summary h3 {
+        color: var(--text);
+        font-size: 16px;
+      }
+
+      .summary h2 {
+        color: var(--accent-strong);
+        font-size: 18px;
+        line-height: 1.15;
+      }
+
+      .summary p {
+        color: rgba(238, 243, 248, 0.84);
+        font-size: 15px;
+        line-height: 1.55;
+      }
+
+      .summary strong {
+        color: var(--accent-strong);
+        font-weight: 800;
+      }
+
+      .quote {
+        display: grid;
+        align-content: start;
+        grid-auto-rows: max-content;
+        gap: 12px;
+        padding: 14px;
+      }
+
+      .quote-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .quote h3 {
+        color: var(--text);
+        font-size: 16px;
+      }
+
+      .quote-tag {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .quote-table {
+        align-self: start;
+        overflow: hidden;
+        border: 1px solid rgba(43, 58, 73, 0.86);
+        border-radius: 6px;
+        background: var(--field);
+      }
+
+      .quote-grid {
+        width: 100%;
+        height: auto !important;
+        border-collapse: collapse;
+        font-variant-numeric: tabular-nums;
+        table-layout: fixed;
+      }
+
+      .quote-grid th,
+      .quote-grid td {
+        padding: 7px 8px;
+        border-bottom: 1px solid rgba(43, 58, 73, 0.82);
+        line-height: 1.25;
+        text-align: center;
+        white-space: normal;
+        font-size: 13px;
+      }
+
+      .quote-grid th {
+        color: var(--muted);
+        font-weight: 650;
+      }
+
+      .quote-grid th:first-child,
+      .quote-grid td:first-child {
+        width: 50%;
+        text-align: center;
+      }
+
+      .quote-grid th + th,
+      .quote-grid td + td {
+        border-left: 1px solid rgba(238, 243, 248, 0.18);
+      }
+
+      .quote-grid tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .quote-note {
+        display: grid;
+        gap: 4px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        color: var(--accent-strong);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .quote-note li {
+        position: relative;
+        padding-left: 13px;
+      }
+
+      .quote-note li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.62em;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--accent-strong);
+      }
+
+      .main {
+        display: grid;
+        grid-template-rows: 326px minmax(0, 1fr);
+        gap: 4px;
+        min-height: 0;
+        padding: 14px;
+      }
+
+      .chart-card,
+      .matrix-card {
+        min-height: 0;
+        display: grid;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--panel);
+      }
+
+      .chart-card {
+        grid-template-rows: 52px 272px;
+      }
+
+      .matrix-card {
+        grid-template-rows: minmax(0, 1fr);
+      }
+
+      .card-head {
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 0 16px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .card-head h2 {
+        font-size: 17px;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--young);
+      }
+
+      .dot.mid { background: var(--mid); }
+      .dot.old-early { background: var(--old-early); }
+      .dot.old-late { background: var(--old-late); }
+      .dot.aged { background: var(--aged); }
+      .dot.rent {
+        width: 18px;
+        height: 3px;
+        border-radius: 999px;
+        background: var(--rent);
+      }
+
+      .chart-wrap {
+        position: relative;
+        min-height: 0;
+        height: 272px;
+        padding: 0 18px;
+      }
+
+      svg {
+        display: block;
+        width: 100%;
+        height: 272px;
+      }
+
+      .month-label {
+        fill: var(--muted);
+        font-size: 13px;
+      }
+
+      .bar-label,
+      .rent-label,
+      .axis-label {
+        fill: var(--text);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .axis-label {
+        fill: var(--muted);
+      }
+
+      .chart-axis-title {
+        position: absolute;
+        z-index: 3;
+        left: 42px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      .chart-axis-title.rent-axis {
+        top: 72px;
+      }
+
+      .chart-axis-title.stock-axis {
+        top: 184px;
+      }
+
+      .axis-line {
+        stroke: rgba(238, 243, 248, 0.18);
+        stroke-width: 1;
+      }
+
+      .chart-tooltip {
+        position: absolute;
+        z-index: 5;
+        display: none;
+        width: max-content;
+        max-width: 180px;
+        padding: 8px 10px;
+        border: 1px solid rgba(176, 145, 243, 0.58);
+        border-radius: 5px;
+        background: rgba(13, 17, 23, 0.96);
+        color: var(--text);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.36);
+        font-size: 12px;
+        line-height: 1.45;
+        pointer-events: none;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
+      .chart-tooltip strong {
+        display: block;
+        color: var(--accent-strong);
+        font-size: 13px;
+        line-height: 1.35;
+        margin-bottom: 2px;
+      }
+
+      .chart-tooltip span {
+        display: block;
+      }
+
+      rect,
+      circle {
+        transition: opacity 0.16s ease, filter 0.16s ease;
+      }
+
+      rect:hover,
+      circle:hover {
+        opacity: 0.86;
+        filter: brightness(1.15);
+      }
+
+      .grid-line {
+        stroke: rgba(238, 243, 248, 0.08);
+        stroke-width: 1;
+      }
+
+      .month-divider {
+        stroke: rgba(238, 243, 248, 0.18);
+        stroke-width: 1;
+      }
+
+      .chart-section-divider {
+        stroke: rgba(238, 243, 248, 0.18);
+        stroke-width: 1;
+      }
+
+      .matrix-wrap {
+        min-height: 0;
+        overflow: hidden;
+        padding: 0 12px 12px;
+      }
+
+      .matrix-wrap table {
+        table-layout: fixed;
+      }
+
+      table {
+        width: 100%;
+        height: 100%;
+        border-collapse: collapse;
+        font-variant-numeric: tabular-nums;
+      }
+
+      th,
+      td {
+        padding: 4px 6px;
+        border-bottom: 1px solid rgba(43, 58, 73, 0.82);
+        text-align: center;
+        white-space: nowrap;
+        font-size: 14px;
+      }
+
+      .matrix-wrap th:first-child,
+      .matrix-wrap td:first-child {
+        width: 118px;
+        color: var(--muted);
+        text-align: left;
+        border-right: 1px solid rgba(238, 243, 248, 0.18);
+      }
+
+      th {
+        color: var(--muted);
+        font-weight: 650;
+      }
+
+      .subhead th {
+        color: rgba(238, 243, 248, 0.74);
+        font-weight: 600;
+      }
+
+      .month-end {
+        border-right: 1px solid rgba(238, 243, 248, 0.18);
+      }
+
+      .month-inner {
+        border-right: 1px solid rgba(238, 243, 248, 0.07);
+      }
+
+      .group-row td {
+        color: var(--accent-strong);
+        font-weight: 750;
+        text-align: left;
+        background: rgba(176, 145, 243, 0.07);
+      }
+
+      .detail-subhead td {
+        color: rgba(238, 243, 248, 0.74);
+        font-weight: 650;
+        background: rgba(16, 23, 32, 0.74);
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .money {
+        color: var(--accent-strong);
+      }
+
+      .muted-zero {
+        color: rgba(153, 170, 186, 0.48);
+      }
+
+      .qty-old-early {
+        color: var(--old-early);
+      }
+
+      .qty-old-late {
+        color: var(--old-late);
+      }
+
+      .qty-aged {
+        color: var(--aged);
+      }
+
+      .age-cell {
+        color: var(--text) !important;
+        font-weight: 700;
+      }
+
+      .age-old-early {
+        background: var(--old-early);
+      }
+
+      .age-old-late {
+        background: var(--old-late);
+      }
+
+      .age-aged {
+        background: var(--aged);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <h1>库存仓租推演</h1>
+      </header>
+
+      <main class="layout">
+        <aside class="panel left">
+          <section class="section summary">
+            <div class="tabs" role="tablist" aria-label="链接">
+              <button class="tab" type="button" role="tab" aria-selected="true" data-case="0">链接A</button>
+              <button class="tab" type="button" role="tab" aria-selected="false" data-case="1">链接B</button>
+            </div>
+            <h3>链接现状分析</h3>
+            <h2 data-summary-title></h2>
+            <p data-summary-copy></p>
+          </section>
+
+          <section class="section quote">
+            <div class="quote-head">
+              <h3>常规仓租报价</h3>
+              <span class="quote-tag" data-regular-tag></span>
+            </div>
+            <div class="quote-table" data-regular-quote></div>
+            <ul class="quote-note" data-regular-note></ul>
+          </section>
+
+          <section class="section quote">
+            <div class="quote-head">
+              <h3>超龄库存附加费报价</h3>
+              <span class="quote-tag" data-aged-tag></span>
+            </div>
+            <div class="quote-table" data-aged-quote></div>
+            <ul class="quote-note" data-aged-note></ul>
+          </section>
+        </aside>
+
+        <section class="panel main">
+          <section class="chart-card">
+            <div class="card-head">
+              <h2>月度库龄结构与仓租变化</h2>
+              <div class="legend">
+                <span class="legend-item"><i class="dot"></i>0-90天</span>
+                <span class="legend-item"><i class="dot mid"></i>91-180天</span>
+                <span class="legend-item"><i class="dot old-early"></i>181-270天</span>
+                <span class="legend-item"><i class="dot old-late"></i>271-365天</span>
+                <span class="legend-item"><i class="dot aged"></i>365天以上</span>
+                <span class="legend-item"><i class="dot rent"></i>合计仓租</span>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <div class="chart-axis-title rent-axis">预期仓租USD</div>
+              <div class="chart-axis-title stock-axis">预期库存数</div>
+              <svg viewBox="0 0 1460 300" preserveAspectRatio="xMidYMid meet" data-chart></svg>
+              <div class="chart-tooltip" data-chart-tooltip></div>
+            </div>
+          </section>
+
+          <section class="matrix-card">
+            <div class="matrix-wrap">
+              <table>
+                <thead data-matrix-head></thead>
+                <tbody data-matrix-body></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const cases = [
+        {
+          title: "期初有超龄库存，后续随先进先出消化",
+          copy: "链接A期初已有<strong>超龄库存</strong>，但预计出库可按先进先出消耗老库存，后续超龄库存<strong>自然归零</strong>，仓租压力回落。",
+          regularTag: "单位：USD/立方英尺/月",
+          agedTag: "单位：USD/立方英尺/月",
+          regularQuote: [["淡季常规仓租", "0.56"], ["旺季常规仓租", "1.40"]],
+          agedQuote: [["181-210天", "0.50"], ["211-240天", "1.00"], ["241-270天", "1.50"], ["271-300天", "5.45"], ["301-330天", "5.70"], ["331-365天", "5.90"], ["365天以上", "6.90 USD/立方英尺 与<br>0.30 USD/件取较大值"]],
+          months: ["2026-08", "2026-09", "2026-10", "2026-11", "2026-12", "2027-01"],
+          rows: [
+            { stock: 672, inbound: 0, outbound: 132, young: 318, mid: 174, oldEarly: 115, oldLate: 35, aged: 30, regular: 255, agedRent: 122, agedBreakdown: [[40, 8], [45, 12], [30, 18], [20, 32], [10, 18], [5, 4], [30, 30]] },
+            { stock: 620, inbound: 96, outbound: 148, young: 345, mid: 160, oldEarly: 80, oldLate: 15, aged: 20, regular: 236, agedRent: 72, agedBreakdown: [[35, 8], [25, 10], [20, 12], [10, 18], [5, 6], [0, 0], [20, 18]] },
+            { stock: 584, inbound: 120, outbound: 156, young: 392, mid: 142, oldEarly: 50, oldLate: 0, aged: 0, regular: 555, agedRent: 22, agedBreakdown: [[25, 5], [15, 6], [10, 11], [0, 0], [0, 0], [0, 0], [0, 0]] },
+            { stock: 522, inbound: 80, outbound: 142, young: 382, mid: 140, oldEarly: 0, oldLate: 0, aged: 0, regular: 496, agedRent: 0, agedBreakdown: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]] },
+            { stock: 454, inbound: 60, outbound: 128, young: 300, mid: 154, oldEarly: 0, oldLate: 0, aged: 0, regular: 432, agedRent: 0, agedBreakdown: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]] },
+            { stock: 376, inbound: 40, outbound: 118, young: 230, mid: 146, oldEarly: 0, oldLate: 0, aged: 0, regular: 143, agedRent: 0, agedBreakdown: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]] }
+          ]
+        },
+        {
+          title: "期初未见超龄库存，后续因消耗不足形成风险",
+          copy: "链接B当前未见<strong>超龄库存</strong>，但预计出库不足以覆盖库存滚动，后续老库存会进入超龄分段并<strong>拉高附加费</strong>。",
+          regularTag: "单位：USD/立方英尺/月",
+          agedTag: "单位：USD/立方英尺/月",
+          regularQuote: [["淡季常规仓租", "0.56"], ["旺季常规仓租", "1.40"]],
+          agedQuote: [["181-210天", "0.50"], ["211-240天", "1.00"], ["241-270天", "1.50"], ["271-300天", "5.45"], ["301-330天", "5.70"], ["331-365天", "5.90"], ["365天以上", "6.90 USD/立方英尺 与<br>0.30 USD/件取较大值"]],
+          months: ["2026-08", "2026-09", "2026-10", "2026-11", "2026-12", "2027-01"],
+          rows: [
+            { stock: 2502, inbound: 72, outbound: 408, young: 1830, mid: 672, oldEarly: 0, oldLate: 0, aged: 0, regular: 1440, agedRent: 0, agedBreakdown: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]] },
+            { stock: 2166, inbound: 24, outbound: 360, young: 1420, mid: 746, oldEarly: 0, oldLate: 0, aged: 0, regular: 1247, agedRent: 0, agedBreakdown: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]] },
+            { stock: 1830, inbound: 0, outbound: 336, young: 840, mid: 740, oldEarly: 250, oldLate: 0, aged: 0, regular: 2634, agedRent: 306, agedBreakdown: [[100, 50], [80, 80], [70, 176], [0, 0], [0, 0], [0, 0], [0, 0]] },
+            { stock: 1530, inbound: 0, outbound: 300, young: 420, mid: 490, oldEarly: 260, oldLate: 360, aged: 0, regular: 2202, agedRent: 669, agedBreakdown: [[160, 64], [60, 80], [40, 125], [140, 220], [100, 120], [120, 60], [0, 0]] },
+            { stock: 1290, inbound: 0, outbound: 240, young: 240, mid: 190, oldEarly: 220, oldLate: 640, aged: 0, regular: 1856, agedRent: 1000, agedBreakdown: [[100, 50], [80, 100], [40, 150], [200, 300], [200, 250], [240, 150], [0, 0]] },
+            { stock: 1110, inbound: 0, outbound: 180, young: 80, mid: 0, oldEarly: 0, oldLate: 905, aged: 125, regular: 639, agedRent: 1421, agedBreakdown: [[0, 0], [0, 0], [0, 0], [180, 260], [260, 360], [465, 501], [125, 300]] }
+          ]
+        }
+      ];
+
+      const colors = { young: "#079900", mid: "#ffc94a", oldEarly: "#f28c34", oldLate: "#ff1010", aged: "#860000" };
+      const fmt = (value) => Math.round(value).toLocaleString("zh-CN");
+      const money = (value) => fmt(value);
+
+      function totalRent(row) {
+        return row.regular + row.agedRent;
+      }
+
+      function segmentStyle(index) {
+        if (index <= 2) return "old-early";
+        if (index <= 5) return "old-late";
+        return "aged";
+      }
+
+      function renderQuote(target, rows, headers = ["项目", "报价"], colorAgeColumn = false) {
+        target.innerHTML = `
+          <table class="quote-grid">
+            <thead><tr>${headers.map((head) => `<th>${head}</th>`).join("")}</tr></thead>
+            <tbody>${rows.map((row, rowIndex) => `<tr>${row.map((cell, cellIndex) => `<td class="${colorAgeColumn && cellIndex === 0 ? `age-cell age-${segmentStyle(rowIndex)}` : ""}">${cell}</td>`).join("")}</tr>`).join("")}</tbody>
+          </table>
+        `;
+      }
+
+      function renderNote(target, lines) {
+        target.innerHTML = lines.map((line) => `<li>${line}</li>`).join("");
+      }
+
+      function renderChart(item) {
+        const svg = document.querySelector("[data-chart]");
+        const svgRect = svg.getBoundingClientRect();
+        const wrapRect = document.querySelector(".chart-wrap").getBoundingClientRect();
+        const monthHeaders = Array.from(document.querySelectorAll("[data-matrix-head] tr:first-child th")).slice(1);
+        const viewW = Math.round(svgRect.width);
+        const viewH = 272;
+        svg.setAttribute("viewBox", `0 0 ${viewW} ${viewH}`);
+        const maxStock = Math.max(...item.rows.map((row) => row.stock));
+        const maxRent = Math.max(...item.rows.map(totalRent));
+        const barBaseY = 258;
+        const barTopY = 124;
+        const barH = barBaseY - barTopY;
+        const lineTopY = 40;
+        const lineBaseY = 98;
+        const lineH = lineBaseY - lineTopY;
+        const barW = 92;
+        const monthCenters = monthHeaders.map((header) => {
+          const rect = header.getBoundingClientRect();
+          return rect.left + rect.width / 2 - svgRect.left;
+        });
+        const firstBoundary = monthHeaders[0].getBoundingClientRect().left - svgRect.left;
+        const lastBoundary = monthHeaders[monthHeaders.length - 1].getBoundingClientRect().right - svgRect.left;
+        const dividerXs = [
+          firstBoundary,
+          ...monthHeaders.slice(0, -1).map((header) => header.getBoundingClientRect().right - svgRect.left)
+        ];
+        document.querySelector(".rent-axis").style.left = `${Math.max(12, svgRect.left - wrapRect.left + firstBoundary - 124)}px`;
+        document.querySelector(".stock-axis").style.left = `${Math.max(12, svgRect.left - wrapRect.left + firstBoundary - 124)}px`;
+        const points = [];
+        let html = "";
+
+        html += `<line class="axis-line" x1="${firstBoundary}" y1="${lineTopY}" x2="${firstBoundary}" y2="${lineBaseY}" />`;
+        html += `<line class="axis-line" x1="${firstBoundary}" y1="${barTopY}" x2="${firstBoundary}" y2="${barBaseY}" />`;
+        dividerXs.forEach((x) => {
+          html += `<line class="month-divider" x1="${x}" y1="0" x2="${x}" y2="${viewH}" />`;
+        });
+        html += `<line class="chart-section-divider" x1="${firstBoundary}" y1="${(lineBaseY + barTopY) / 2}" x2="${lastBoundary}" y2="${(lineBaseY + barTopY) / 2}" />`;
+
+        for (let i = 0; i < 5; i += 1) {
+          const y = barTopY + (barH / 4) * i;
+          html += `<line class="grid-line" x1="${firstBoundary}" y1="${y}" x2="${lastBoundary}" y2="${y}" />`;
+        }
+
+        item.rows.forEach((row, index) => {
+          const x = monthCenters[index] - barW / 2;
+          let y = barBaseY;
+          ["young", "mid", "oldEarly", "oldLate", "aged"].forEach((key) => {
+            const h = (row[key] / maxStock) * barH;
+            y -= h;
+            const segmentNames = { young: "0-90天", mid: "91-180天", oldEarly: "181-270天", oldLate: "271-365天", aged: "365天以上" };
+            html += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="${colors[key]}" rx="3" data-tip-title="${item.months[index]}" data-tip-body="${segmentNames[key]}库存：${fmt(row[key])}"></rect>`;
+          });
+          const rentY = lineBaseY - (totalRent(row) / maxRent) * lineH;
+          points.push([monthCenters[index], rentY]);
+        });
+
+        const path = points.map((point, index) => `${index === 0 ? "M" : "L"}${point[0]},${point[1]}`).join(" ");
+        html += `<path d="${path}" fill="none" stroke="#b091f3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />`;
+        points.forEach((point, index) => {
+          const labelY = Math.max(point[1] - 10, 18);
+          html += `<circle cx="${point[0]}" cy="${point[1]}" r="5" fill="#b091f3" data-tip-title="${item.months[index]}" data-tip-body="合计仓租USD：${money(totalRent(item.rows[index]))}"></circle>`;
+          html += `<text class="rent-label" x="${point[0]}" y="${labelY}" text-anchor="middle">${money(totalRent(item.rows[index]))}</text>`;
+        });
+        svg.innerHTML = html;
+        bindChartTooltip();
+      }
+
+      function bindChartTooltip() {
+        const svg = document.querySelector("[data-chart]");
+        const tooltip = document.querySelector("[data-chart-tooltip]");
+        const wrap = document.querySelector(".chart-wrap");
+        svg.onmousemove = (event) => {
+          const target = event.target.closest("[data-tip-title]");
+          if (!target) {
+            tooltip.style.display = "none";
+            return;
+          }
+          const rect = wrap.getBoundingClientRect();
+          tooltip.innerHTML = `<strong>${target.dataset.tipTitle}</strong><span>${target.dataset.tipBody}</span>`;
+          tooltip.style.display = "block";
+          tooltip.style.left = `${Math.min(event.clientX - rect.left + 12, rect.width - tooltip.offsetWidth - 8)}px`;
+          tooltip.style.top = `${Math.max(event.clientY - rect.top - tooltip.offsetHeight - 10, 8)}px`;
+        };
+        svg.onmouseleave = () => {
+          tooltip.style.display = "none";
+        };
+      }
+
+      function renderMatrix(item) {
+        document.querySelector("[data-matrix-head]").innerHTML = `
+          <tr>
+            <th>指标</th>
+            ${item.months.map((month, index) => `<th colspan="2" class="${index < item.months.length - 1 ? "month-end" : ""}">${month}</th>`).join("")}
+          </tr>
+        `;
+        const spanValue = (value, cls = "", index = 0) => `<td class="${cls} ${index < item.months.length - 1 ? "month-end" : ""}" colspan="2">${value}</td>`;
+        const dualValue = (left, right, cls = "", index = 0) => `<td class="month-inner">${left}</td><td class="${cls} ${index < item.months.length - 1 ? "month-end" : ""}">${right}</td>`;
+        const agedDualValue = (qty, fee, segmentIndex, index = 0) => {
+          const style = segmentStyle(segmentIndex);
+          const qtyClass = qty > 0 ? `qty-${style}` : "muted-zero";
+          const feeClass = fee > 0 ? "money" : "muted-zero";
+          return `<td class="month-inner ${qtyClass}">${fmt(qty)}</td><td class="${feeClass} ${index < item.months.length - 1 ? "month-end" : ""}">${money(fee)}</td>`;
+        };
+        const agedSegments = ["181-210天", "211-240天", "241-270天", "271-300天", "301-330天", "331-365天", "365天以上"];
+        const rows = [
+          `<tr><td>预期入库数</td>${item.rows.map((row, index) => spanValue(fmt(row.inbound), "", index)).join("")}</tr>`,
+          `<tr><td>预期出库数</td>${item.rows.map((row, index) => spanValue(fmt(row.outbound), "", index)).join("")}</tr>`,
+          `<tr><td>预期库存数</td>${item.rows.map((row, index) => spanValue(fmt(row.stock), "", index)).join("")}</tr>`,
+          `<tr><td>仓租合计USD</td>${item.rows.map((row, index) => spanValue(money(totalRent(row)), "money", index)).join("")}</tr>`,
+          `<tr><td>常规仓租USD</td>${item.rows.map((row, index) => spanValue(money(row.regular), "money", index)).join("")}</tr>`,
+          `<tr class="group-row"><td colspan="13">其中，超龄库存及其超龄库存附加费：</td></tr>`,
+          `<tr class="detail-subhead"><td>库龄区间</td>${item.rows.map((row, index) => dualValue("数量", "附加费", "", index)).join("")}</tr>`,
+          ...agedSegments.map((label, segmentIndex) => `
+            <tr>
+              <td class="age-cell age-${segmentStyle(segmentIndex)}">${label}</td>
+              ${item.rows.map((row, index) => agedDualValue(row.agedBreakdown[segmentIndex][0], row.agedBreakdown[segmentIndex][1], segmentIndex, index)).join("")}
+            </tr>
+          `)
+        ];
+        document.querySelector("[data-matrix-body]").innerHTML = rows.join("");
+      }
+
+      function render(index) {
+        const item = cases[index];
+        document.querySelector("[data-summary-title]").textContent = item.title;
+        document.querySelector("[data-summary-copy]").innerHTML = item.copy;
+        document.querySelector("[data-regular-tag]").textContent = item.regularTag;
+        document.querySelector("[data-aged-tag]").textContent = item.agedTag;
+        renderNote(document.querySelector("[data-regular-note]"), [
+          "旺季：10-12月。",
+          "常规仓租 = 库存体积 × 当月常规仓租单价。"
+        ]);
+        renderNote(document.querySelector("[data-aged-note]"), [
+          "超龄库存附加费是在常规仓租基础上额外收取。",
+          "超龄库存附加费 = max(库存体积 × 超龄单价, 库存数量 × 最低收费)。"
+        ]);
+        renderQuote(document.querySelector("[data-regular-quote]"), item.regularQuote);
+        renderMatrix(item);
+        renderQuote(document.querySelector("[data-aged-quote]"), item.agedQuote, ["库龄区间", "单价"], true);
+        renderChart(item);
+      }
+
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".tab").forEach((node) => node.setAttribute("aria-selected", "false"));
+          tab.setAttribute("aria-selected", "true");
+          render(Number(tab.dataset.case));
+        });
+      });
+
+      render(0);
+    </script>
+  </body>
+</html>

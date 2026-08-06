@@ -1315,6 +1315,21 @@
         text-decoration-thickness: 2px;
       }
 
+      .modal-copy .case-link {
+        display: inline-block;
+        width: fit-content;
+        margin-top: 6px;
+        padding: 8px 12px;
+        border: 1px solid rgba(176, 145, 243, 0.58);
+        border-radius: 6px;
+        background: rgba(176, 145, 243, 0.08);
+        text-decoration: none;
+      }
+
+      .modal-copy .case-link + .case-link {
+        margin-left: 8px;
+      }
+
     </style>
   </head>
   <body>
@@ -2065,8 +2080,8 @@
                 <span>把预判结果转成库存决策辅助</span>
               </div>
               <div class="compare-cell">
-                <b>输出高仓租、超龄、慢动风险清单</b>
-                <span>辅助清库存、调拨、促销和暂停补货。</span>
+                <b>输出先进先出库龄与仓租测算</b>
+                <span>辅助判断未来库龄结构和预估仓租压力。</span>
               </div>
             </div>
           </div>
@@ -2092,12 +2107,12 @@
           <section>
             <h3>库存推演</h3>
             <p>库存发出后，按库龄滚动、阶梯仓租单价和在库体积推演未来仓租。</p>
-            <p>结果用于定位高仓租、超龄、慢动库存，辅助清库存/调拨/促销/暂停补货。</p>
+            <p>本次原型聚焦先进先出库龄推演和 FBA 仓租测算。</p>
           </section>
           <section>
-            <h3>边界说明</h3>
-            <p>本页呈现周转天数下降 18 天和仓租收入比 1.2% → 1.0%。</p>
-            <p>仓租推演支持风险预判和业务纠偏，但不包装成可精确归因的直接节省金额。</p>
+            <h3>项目入口</h3>
+            <a class="case-link" href="../../demos/supply-planning/forecast_main.html" target="_blank" rel="noreferrer">进入发货推演</a>
+            <a class="case-link" href="../../demos/inventory-control/index.html" target="_blank" rel="noreferrer">进入库存推演</a>
           </section>
         </div>
       </template>
