@@ -11,6 +11,9 @@
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
+    <clipPath id="factTableClip">
+      <rect x="1" y="1" width="243" height="210" rx="6"/>
+    </clipPath>
     <marker id="arrowPurple" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto">
       <path d="M0 0L10 5L0 10Z" fill="#b091f3"/>
     </marker>
@@ -21,50 +24,49 @@
 
   <g transform="translate(50 66)">
     <rect x="0" y="0" width="245" height="212" rx="7" fill="#17151f" stroke="#5797ff" stroke-opacity=".45"/>
-    <path d="M7 7H238V38H7Z" fill="#b091f3" opacity=".88"/>
-    <path d="M7 38H238" stroke="#f5f2ff" stroke-opacity=".18" stroke-width="1"/>
-    <g filter="url(#glow)">
-      <rect x="22" y="18" width="42" height="8" rx="3" fill="#f5f2ff" opacity=".74"/>
-      <rect x="84" y="18" width="34" height="8" rx="3" fill="#f5f2ff" opacity=".52"/>
-      <rect x="143" y="18" width="30" height="8" rx="3" fill="#f5f2ff" opacity=".52"/>
-      <rect x="196" y="18" width="24" height="8" rx="3" fill="#f5f2ff" opacity=".74"/>
-    </g>
+    <g clip-path="url(#factTableClip)">
+      <path d="M7 7H238V38H7Z" fill="#b091f3" opacity=".88"/>
+      <path d="M7 38H238" stroke="#f5f2ff" stroke-opacity=".18" stroke-width="1"/>
+      <g filter="url(#glow)">
+        <rect x="22" y="18" width="42" height="8" rx="3" fill="#f5f2ff" opacity=".74"/>
+        <rect x="84" y="18" width="34" height="8" rx="3" fill="#f5f2ff" opacity=".52"/>
+        <rect x="143" y="18" width="30" height="8" rx="3" fill="#f5f2ff" opacity=".52"/>
+        <rect x="196" y="18" width="24" height="8" rx="3" fill="#f5f2ff" opacity=".74"/>
+      </g>
 
-    <g stroke="#f5f2ff" stroke-opacity=".14" stroke-width="1">
-      <path d="M22 70H223"/>
-      <path d="M22 102H223"/>
-      <path d="M22 134H223"/>
-      <path d="M22 166H223"/>
-      <path d="M22 198H223"/>
-      <path d="M82 46V198"/>
-      <path d="M141 46V198"/>
-      <path d="M192 46V198"/>
-    </g>
-    <g filter="url(#glow)">
-      <rect x="29" y="51" width="50" height="10" rx="3" fill="#ff89c2"/>
-      <rect x="97" y="51" width="39" height="10" rx="3" fill="#5797ff"/>
-      <rect x="157" y="51" width="31" height="10" rx="3" fill="#ffa95c"/>
-      <rect x="202" y="51" width="21" height="10" rx="3" fill="#cef26a"/>
+      <g stroke="#f5f2ff" stroke-opacity=".14" stroke-width="1">
+        <path d="M22 70H223"/>
+        <path d="M22 102H223"/>
+        <path d="M22 134H223"/>
+        <path d="M22 166H223"/>
+        <path d="M22 198H223"/>
+      </g>
+      <g filter="url(#glow)">
+        <rect x="29" y="51" width="50" height="10" rx="3" fill="#ff89c2"/>
+        <rect x="97" y="51" width="39" height="10" rx="3" fill="#5797ff"/>
+        <rect x="157" y="51" width="31" height="10" rx="3" fill="#ffa95c"/>
+        <rect x="202" y="51" width="21" height="10" rx="3" fill="#cef26a"/>
 
-      <rect x="29" y="83" width="71" height="10" rx="3" fill="#ff89c2" opacity=".78"/>
-      <rect x="108" y="83" width="34" height="10" rx="3" fill="#5797ff" opacity=".78"/>
-      <rect x="157" y="83" width="45" height="10" rx="3" fill="#ffa95c"/>
-      <rect x="207" y="83" width="19" height="10" rx="3" fill="#ff89c2"/>
+        <rect x="29" y="83" width="71" height="10" rx="3" fill="#ff89c2" opacity=".78"/>
+        <rect x="108" y="83" width="34" height="10" rx="3" fill="#5797ff" opacity=".78"/>
+        <rect x="157" y="83" width="45" height="10" rx="3" fill="#ffa95c"/>
+        <rect x="207" y="83" width="19" height="10" rx="3" fill="#ff89c2"/>
 
-      <rect x="29" y="115" width="43" height="10" rx="3" fill="#b091f3"/>
-      <rect x="97" y="115" width="58" height="10" rx="3" fill="#5797ff"/>
-      <rect x="168" y="115" width="28" height="10" rx="3" fill="#ffa95c" opacity=".8"/>
-      <rect x="207" y="115" width="21" height="10" rx="3" fill="#cef26a"/>
+        <rect x="29" y="115" width="43" height="10" rx="3" fill="#b091f3"/>
+        <rect x="97" y="115" width="58" height="10" rx="3" fill="#5797ff"/>
+        <rect x="168" y="115" width="28" height="10" rx="3" fill="#ffa95c" opacity=".8"/>
+        <rect x="207" y="115" width="21" height="10" rx="3" fill="#cef26a"/>
 
-      <rect x="29" y="147" width="62" height="10" rx="3" fill="#5797ff"/>
-      <rect x="108" y="147" width="43" height="10" rx="3" fill="#5797ff" opacity=".72"/>
-      <rect x="168" y="147" width="38" height="10" rx="3" fill="#ff89c2" opacity=".78"/>
-      <rect x="213" y="147" width="18" height="10" rx="3" fill="#cef26a"/>
+        <rect x="29" y="147" width="62" height="10" rx="3" fill="#5797ff"/>
+        <rect x="108" y="147" width="43" height="10" rx="3" fill="#5797ff" opacity=".72"/>
+        <rect x="168" y="147" width="38" height="10" rx="3" fill="#ff89c2" opacity=".78"/>
+        <rect x="213" y="147" width="18" height="10" rx="3" fill="#cef26a"/>
 
-      <rect x="29" y="179" width="56" height="10" rx="3" fill="#ff89c2" opacity=".72"/>
-      <rect x="97" y="179" width="50" height="10" rx="3" fill="#5797ff"/>
-      <rect x="157" y="179" width="36" height="10" rx="3" fill="#ffa95c" opacity=".76"/>
-      <rect x="202" y="179" width="24" height="10" rx="3" fill="#b091f3"/>
+        <rect x="29" y="179" width="56" height="10" rx="3" fill="#ff89c2" opacity=".72"/>
+        <rect x="97" y="179" width="50" height="10" rx="3" fill="#5797ff"/>
+        <rect x="157" y="179" width="36" height="10" rx="3" fill="#ffa95c" opacity=".76"/>
+        <rect x="202" y="179" width="24" height="10" rx="3" fill="#b091f3"/>
+      </g>
     </g>
   </g>
 
@@ -77,8 +79,8 @@
   <g transform="translate(458 48)">
     <g>
       <rect x="0" y="0" width="230" height="54" rx="7" fill="#17151f" stroke="#b091f3" stroke-opacity=".45"/>
-      <circle cx="44" cy="20" r="10" fill="#cef26a"/>
-      <path d="M25 45C29 32 36 28 44 28C52 28 59 32 63 45" fill="#cef26a" opacity=".9"/>
+      <circle cx="44" cy="20" r="10" fill="#ffa95c"/>
+      <path d="M25 45C29 32 36 28 44 28C52 28 59 32 63 45" fill="#ffa95c" opacity=".9"/>
       <path d="M118 38L141 28L164 34L190 18L215 28" fill="none" stroke="#b091f3" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
       <rect x="137" y="28" width="8" height="10" fill="#5797ff"/>
       <rect x="186" y="18" width="8" height="20" fill="#5797ff"/>
