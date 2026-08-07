@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>预计到货日期优化</title>
+    <style>
+      :root {
+        --ink: #121119;
+        --panel: #17151f;
+        --panel-2: #201d2b;
+        --paper: #f5f2ff;
+        --muted: rgba(245, 242, 255, 0.68);
+        --line: rgba(245, 242, 255, 0.2);
+        --lavender: rgb(176, 145, 243);
+        --lime: #cef26a;
+        --blue: #5797ff;
+        --orange: #ffa95c;
+        --pink: #ff89c2;
+      }
+
+      @font-face {
+        font-family: "LXGW WenKai";
+        src: url("../../assets/fonts/LXGWWenKai-Gerald-subset.woff2?v=20260807") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        overflow-x: hidden;
+        background: var(--ink);
+        color: var(--paper);
+        font-family: Inter, "Segoe UI", "LXGW WenKai", "Microsoft YaHei", sans-serif;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+
+      .page {
+        width: 100%;
+        max-width: 1920px;
+        margin: 0 auto;
+        background:
+          linear-gradient(90deg, rgba(176, 145, 243, 0.06), transparent 34%, rgba(206, 242, 106, 0.035) 100%),
+          var(--ink);
+      }
+
+      .screen {
+        position: relative;
+        padding: 36px 72px 28px;
+        overflow: visible;
+      }
+
+      .topbar {
+        display: none;
+      }
+
+      .brand {
+        color: var(--lavender);
+        font-size: 21px;
+        line-height: 1;
+      }
+
+      .nav {
+        display: flex;
+        gap: 28px;
+      }
+
+      .hero-grid {
+        min-height: 700px;
+        display: grid;
+        grid-template-columns: minmax(820px, 0.96fr) minmax(780px, 1.04fr);
+        gap: 44px;
+        align-items: start;
+      }
+
+      .hero-copy {
+        max-width: 820px;
+        padding-top: 48px;
+      }
+
+      .kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 28px;
+        color: var(--lime);
+        font-size: 18px;
+        line-height: 1;
+      }
+
+      .kicker::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 0 6px rgba(206, 242, 106, 0.12);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 82px;
+        line-height: 1.03;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        margin: 34px 0 0;
+        color: var(--paper);
+        font-size: 28px;
+        line-height: 1.48;
+      }
+
+      .insight {
+        margin-top: 36px;
+        padding: 28px 32px;
+        border-left: 6px solid var(--lavender);
+        background: rgba(245, 242, 255, 0.045);
+        color: var(--paper);
+        font-size: 26px;
+        line-height: 1.38;
+      }
+
+      .stakes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 28px;
+      }
+
+      .stake {
+        min-height: 92px;
+        display: grid;
+        align-content: center;
+        gap: 8px;
+        padding: 18px 20px;
+        border: 1px solid rgba(245, 242, 255, 0.14);
+        background: rgba(245, 242, 255, 0.026);
+      }
+
+      .stake b {
+        color: var(--lavender);
+        font-size: 18px;
+        line-height: 1;
+      }
+
+      .stake span {
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.28;
+      }
+
+      .relation-panel {
+        position: relative;
+        height: 700px;
+        border: 0;
+        border-radius: 0;
+        background:
+          radial-gradient(circle at 50% 50%, rgba(176, 145, 243, 0.16), transparent 22%),
+          radial-gradient(circle at 28% 22%, rgba(176, 145, 243, 0.12), transparent 20%),
+          radial-gradient(circle at 76% 33%, rgba(87, 151, 255, 0.1), transparent 21%),
+          radial-gradient(circle at 70% 75%, rgba(255, 137, 194, 0.08), transparent 20%);
+        box-shadow: none;
+      }
+
+      .hub {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 214px;
+        height: 214px;
+        display: grid;
+        place-items: center;
+        padding: 28px;
+        border: 1.6px solid rgba(255, 255, 255, 0.86);
+        border-radius: 48% 52% 47% 53% / 56% 45% 55% 44%;
+        background:
+          radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.32), transparent 26%),
+          radial-gradient(circle at 62% 68%, rgba(255, 255, 255, 0.18), transparent 48%),
+          rgba(245, 242, 255, 0.14);
+        transform: translate(-50%, -50%);
+        box-shadow:
+          0 26px 70px rgba(176, 145, 243, 0.16),
+          inset 0 -18px 36px rgba(0, 0, 0, 0.18);
+        animation: hubBreath 6s ease-in-out infinite;
+      }
+
+      .hub-icon {
+        width: 76px;
+        height: 76px;
+        overflow: visible;
+        filter:
+          drop-shadow(0 4px 6px rgba(0, 0, 0, 0.34))
+          drop-shadow(0 0 12px rgba(255, 255, 255, 0.16));
+      }
+
+      .hub-content {
+        display: grid;
+        justify-items: center;
+        gap: 12px;
+      }
+
+      .hub-label {
+        color: #000;
+        font-size: 24px;
+        font-weight: 800;
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .hub-icon .icon-line,
+      .hub-icon .icon-fill {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.96);
+        stroke-width: 5.4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .node {
+        position: absolute;
+        width: 276px;
+        min-height: 148px;
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr);
+        align-items: center;
+        gap: 14px;
+        padding: 22px 26px 20px 22px;
+        border: 1px solid rgba(245, 242, 255, 0.22);
+        border-radius: 34% 66% 42% 58% / 56% 42% 58% 44%;
+        background:
+          radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.14), transparent 23%),
+          radial-gradient(circle at 62% 68%, color-mix(in srgb, var(--node-color, var(--lavender)) 16%, transparent), transparent 48%),
+          color-mix(in srgb, var(--node-color, var(--lavender)) 13%, rgba(18, 17, 25, 0.8));
+        box-shadow:
+          0 22px 58px rgba(0, 0, 0, 0.22),
+          inset 0 -14px 28px rgba(0, 0, 0, 0.2);
+        transform-origin: center;
+        transition:
+          opacity 180ms ease,
+          filter 180ms ease,
+          transform 180ms ease,
+          border-radius 260ms ease;
+        animation: floatA 8s ease-in-out infinite, blobMorph 7.2s ease-in-out infinite;
+      }
+
+      .node b {
+        display: block;
+        color: var(--paper);
+        font-size: 22px;
+        line-height: 1;
+      }
+
+      .role-icon {
+        width: 52px;
+        height: 52px;
+        overflow: visible;
+      }
+
+      .role-icon .icon-line {
+        fill: none;
+        stroke: var(--node-color, var(--lavender));
+        stroke-width: 5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .role-icon .icon-fill {
+        fill: color-mix(in srgb, var(--node-color, var(--lavender)) 28%, transparent);
+        stroke: var(--node-color, var(--lavender));
+        stroke-width: 5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .node-copy {
+        min-width: 0;
+      }
+
+      .tension-grid {
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        top: calc(100% - 8px);
+        z-index: 4;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        padding: 14px;
+        border: 1px solid rgba(245, 242, 255, 0.18);
+        border-radius: 18px;
+        background: rgba(18, 17, 25, 0.94);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-8px) scale(0.98);
+        transition:
+          opacity 180ms ease,
+          transform 180ms ease;
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      }
+
+      .tension {
+        min-height: 40px;
+        display: grid;
+        align-content: center;
+        padding: 7px 8px;
+        border: 1px solid rgba(245, 242, 255, 0.14);
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.18;
+      }
+
+      .tension em {
+        color: var(--node-color, var(--lavender));
+        font-style: normal;
+      }
+
+      .node small {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.32;
+        max-width: 172px;
+      }
+
+      .node::after {
+        content: "?";
+        position: absolute;
+        right: 16px;
+        top: 12px;
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border: 2px solid rgba(255, 255, 255, 0.7);
+        border-radius: 50%;
+        background: #ee3d4d;
+        color: white;
+        font-family: Inter, "Segoe UI", sans-serif;
+        font-size: 21px;
+        line-height: 1;
+        box-shadow: 0 0 0 0 rgba(238, 61, 77, 0.4);
+        animation: questionPulse 2.6s ease-out infinite;
+      }
+
+      .node:hover {
+        z-index: 10;
+        border-radius: 28px;
+        transform: scale(1.04);
+      }
+
+      .node:hover .tension-grid {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0) scale(1);
+      }
+
+      .relation-panel:hover .node:not(:hover) {
+        opacity: 0.58;
+        filter: saturate(0.72);
+      }
+
+      .relation-panel:hover .node,
+      .relation-panel:hover .hub {
+        animation-play-state: paused;
+      }
+
+      .node.purchase {
+        --node-color: var(--pink);
+        left: 92px;
+        top: 58px;
+        border-color: color-mix(in srgb, var(--pink) 58%, transparent);
+        animation-name: floatA, blobMorph;
+      }
+
+      .node.supplier {
+        --node-color: var(--orange);
+        right: 96px;
+        top: 56px;
+        border-color: color-mix(in srgb, var(--orange) 58%, transparent);
+        border-radius: 60% 40% 56% 44% / 46% 57% 43% 54%;
+        animation-name: floatB, blobMorph;
+        animation-duration: 9s, 7.2s;
+      }
+
+      .node.logistics {
+        --node-color: var(--blue);
+        right: -6px;
+        top: 278px;
+        border-color: color-mix(in srgb, var(--blue) 58%, transparent);
+        border-radius: 46% 54% 38% 62% / 58% 45% 55% 42%;
+        animation-name: floatC, blobMorph;
+        animation-duration: 7.5s, 7.2s;
+      }
+
+      .node.warehouse {
+        --node-color: var(--lime);
+        right: 154px;
+        bottom: 64px;
+        border-color: color-mix(in srgb, var(--lime) 54%, transparent);
+        border-radius: 58% 42% 54% 46% / 50% 61% 39% 50%;
+        animation-name: floatD, blobMorph;
+        animation-duration: 9.8s, 7.2s;
+      }
+
+      .node.fulfillment {
+        --node-color: var(--lavender);
+        left: 112px;
+        bottom: 86px;
+        border-color: color-mix(in srgb, var(--lavender) 60%, transparent);
+        border-radius: 42% 58% 50% 50% / 48% 54% 46% 52%;
+        animation-name: floatE, blobMorph;
+        animation-duration: 8.8s, 7.2s;
+      }
+
+      .relation-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .relation-svg path {
+        fill: none;
+        stroke: rgba(245, 242, 255, 0.14);
+        stroke-width: 2;
+        stroke-dasharray: 4 12;
+      }
+
+      .relation-svg path.accent {
+        stroke: rgba(206, 242, 106, 0.28);
+      }
+
+      @keyframes hubBreath {
+        0%, 100% {
+          transform: translate(-50%, -50%) scale(1);
+          border-radius: 48% 52% 47% 53% / 56% 45% 55% 44%;
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.035);
+          border-radius: 55% 45% 52% 48% / 48% 58% 42% 52%;
+        }
+      }
+
+      @keyframes blobMorph {
+        0%, 100% {
+          border-radius: 34% 66% 42% 58% / 56% 42% 58% 44%;
+          scale: 1;
+        }
+        33% {
+          border-radius: 58% 42% 54% 46% / 46% 58% 42% 54%;
+          scale: 1.025;
+        }
+        66% {
+          border-radius: 45% 55% 62% 38% / 60% 44% 56% 40%;
+          scale: 0.992;
+        }
+      }
+
+      @keyframes floatA {
+        0%, 100% { translate: 0 0; }
+        35% { translate: 16px -20px; }
+        70% { translate: -10px 15px; }
+      }
+
+      @keyframes floatB {
+        0%, 100% { translate: 0 0; }
+        42% { translate: -18px 18px; }
+        76% { translate: 14px -12px; }
+      }
+
+      @keyframes floatC {
+        0%, 100% { translate: 0 0; }
+        45% { translate: 14px 17px; }
+        78% { translate: -16px -10px; }
+      }
+
+      @keyframes floatD {
+        0%, 100% { translate: 0 0; }
+        38% { translate: -18px -14px; }
+        72% { translate: 12px 16px; }
+      }
+
+      @keyframes floatE {
+        0%, 100% { translate: 0 0; }
+        34% { translate: 20px 14px; }
+        70% { translate: -12px -18px; }
+      }
+
+      @keyframes questionPulse {
+        0% { box-shadow: 0 0 0 0 rgba(238, 61, 77, 0.44); }
+        70% { box-shadow: 0 0 0 11px rgba(238, 61, 77, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(238, 61, 77, 0); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .hub,
+        .node,
+        .node::after {
+          animation: none;
+        }
+      }
+
+      .second {
+        display: grid;
+        grid-template-rows: auto auto auto;
+        gap: 28px;
+        padding-top: 34px;
+        border-top: 1px solid rgba(245, 242, 255, 0.12);
+      }
+
+      .section-title {
+        display: block;
+      }
+
+      .section-title h2 {
+        margin: 0;
+        font-size: 42px;
+        line-height: 1;
+      }
+
+      .model-grid {
+        min-height: 560px;
+        display: grid;
+        grid-template-columns: minmax(430px, 0.34fr) minmax(0, 0.66fr);
+        gap: 34px;
+      }
+
+      .model-panel,
+      .demo-panel,
+      .summary-panel {
+        border: 1px solid var(--line);
+        background:
+          linear-gradient(180deg, rgba(245, 242, 255, 0.048), rgba(245, 242, 255, 0.012)),
+          var(--panel);
+      }
+
+      .model-panel {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        min-height: 0;
+        padding: 26px;
+      }
+
+      .model-panel h3,
+      .demo-panel h3 {
+        margin: 0;
+        font-size: 26px;
+        line-height: 1;
+      }
+
+      .cost-list {
+        display: grid;
+        gap: 14px;
+        margin-top: 24px;
+      }
+
+      .cost-item {
+        min-height: 112px;
+        display: grid;
+        grid-template-columns: 44px minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
+        padding: 20px 20px;
+        border: 1px solid rgba(245, 242, 255, 0.16);
+        background: rgba(245, 242, 255, 0.026);
+      }
+
+      .cost-icon {
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        border: 1px solid currentColor;
+        color: var(--lavender);
+        font-family: Inter, "Segoe UI", sans-serif;
+        font-size: 19px;
+      }
+
+      .cost-item:nth-child(2) .cost-icon { color: var(--blue); }
+      .cost-item:nth-child(3) .cost-icon { color: var(--lime); }
+
+      .cost-item b {
+        display: block;
+        color: var(--paper);
+        font-size: 22px;
+        line-height: 1;
+      }
+
+      .cost-item span {
+        display: block;
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.35;
+      }
+
+      .rule {
+        align-self: end;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+        color: var(--paper);
+        font-size: 22px;
+        line-height: 1.42;
+      }
+
+      .demo-panel {
+        min-height: 0;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        padding: 24px 28px 22px;
+      }
+
+      .demo-head {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 24px;
+        margin-bottom: 14px;
+      }
+
+      .plotly-frame {
+        position: relative;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(245, 242, 255, 0.18);
+        background: #f8f8fd;
+      }
+
+      .plotly-frame iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        border: 0;
+        background: #f4f1ff;
+        overflow: hidden;
+      }
+
+      .plotly-stage {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 820px;
+        height: 420px;
+        transform: translate(-50%, -48%) skewY(-10deg) rotate(-6deg);
+        border-left: 1px solid rgba(32, 44, 70, 0.22);
+        border-bottom: 1px solid rgba(32, 44, 70, 0.22);
+      }
+
+      .grid-line-x,
+      .grid-line-y {
+        position: absolute;
+        background: rgba(32, 44, 70, 0.12);
+      }
+
+      .grid-line-x { left: 0; right: 0; height: 1px; }
+      .grid-line-y { top: 0; bottom: 0; width: 1px; }
+
+      .bar {
+        position: absolute;
+        width: 34px;
+        height: 78px;
+        background: rgba(110, 116, 126, 0.42);
+        border: 1px solid rgba(75, 82, 96, 0.36);
+        box-shadow: 14px -10px 0 rgba(110, 116, 126, 0.2);
+      }
+
+      .bar.active {
+        background: rgba(206, 242, 106, 0.68);
+        border-color: rgba(118, 150, 40, 0.48);
+        box-shadow: 14px -10px 0 rgba(206, 242, 106, 0.28);
+      }
+
+      .bar.warn {
+        background: rgba(255, 137, 194, 0.62);
+        border-color: rgba(180, 74, 122, 0.42);
+        box-shadow: 14px -10px 0 rgba(255, 137, 194, 0.24);
+      }
+
+      .demo-caption {
+        position: absolute;
+        left: 30px;
+        top: 28px;
+        color: #1c2637;
+        font-size: 20px;
+        line-height: 1.2;
+      }
+
+      .demo-controls {
+        position: absolute;
+        left: 30px;
+        right: 30px;
+        bottom: 24px;
+        display: grid;
+        grid-template-columns: 112px minmax(0, 1fr);
+        gap: 18px;
+        align-items: center;
+      }
+
+      .play-button {
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border: 1px solid #25354c;
+        color: #25354c;
+        font-size: 16px;
+      }
+
+      .slider {
+        height: 4px;
+        background: #25354c;
+      }
+
+      .slider::before {
+        content: "";
+        display: block;
+        width: 17%;
+        height: 4px;
+        background: var(--lavender);
+      }
+
+      .summary-panel {
+        display: grid;
+        align-content: center;
+        gap: 12px;
+        min-height: 112px;
+        padding: 22px 30px;
+      }
+
+      .summary-main {
+        color: var(--paper);
+        font-size: 25px;
+        line-height: 1.34;
+        white-space: nowrap;
+      }
+
+      .summary-note {
+        color: rgba(245, 242, 255, 0.6);
+        font-size: 15px;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="screen">
+        <header class="topbar">
+          <div class="brand">GERALD LEUNG</div>
+          <nav class="nav" aria-label="页面导航">
+            <span>作品集</span>
+            <span>供应链问题的四类求解范式</span>
+          </nav>
+        </header>
+
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <h1>预计到货日期优化</h1>
+            <p class="lead">从预计到货日期的前后挪动切入，把采购、物流、仓库与计划之间的隐性冲突，转化为可建模、可计算的决策问题。</p>
+            <div class="insight">预计到货日期表面是时间字段，背后牵动的是跨部门成本分配。</div>
+            <div class="stakes" aria-label="日期调整的四类张力">
+              <div class="stake">
+                <b>早到</b>
+                <span>降低缺货风险，也可能提前占用仓库与协同资源。</span>
+              </div>
+              <div class="stake">
+                <b>晚到</b>
+                <span>缓解现场压力，也可能把风险传导给计划和履约。</span>
+              </div>
+              <div class="stake">
+                <b>多到</b>
+                <span>可能凑出物流效率，也可能制造单日峰值。</span>
+              </div>
+              <div class="stake">
+                <b>少到</b>
+                <span>现场更平稳，但合车机会和需求覆盖都会变弱。</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="relation-panel" aria-label="预计到货日期牵动关系">
+            <svg class="relation-svg" viewBox="0 0 900 760" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M450 380 C340 310 245 190 208 142" />
+              <path d="M450 380 C548 300 640 184 696 142" />
+              <path class="accent" d="M450 380 C572 382 696 390 762 390" />
+              <path d="M450 380 C552 476 646 568 668 622" />
+              <path class="accent" d="M450 380 C332 490 250 575 228 616" />
+            </svg>
+            <div class="hub">
+              <div class="hub-content">
+                <svg class="hub-icon" viewBox="0 0 100 100" aria-hidden="true">
+                  <path class="icon-fill" d="M22 26h56a8 8 0 0 1 8 8v42a8 8 0 0 1-8 8H22a8 8 0 0 1-8-8V34a8 8 0 0 1 8-8z" />
+                  <path class="icon-line" d="M14 44h72" />
+                  <path class="icon-line" d="M32 16v18M68 16v18" />
+                  <path class="icon-line" d="M32 58h6M48 58h6M64 58h6M32 72h6M48 72h6M64 72h6" />
+                </svg>
+                <div class="hub-label">预计到货时间</div>
+              </div>
+            </div>
+            <div class="node purchase">
+              <svg class="role-icon" viewBox="0 0 100 100" aria-hidden="true">
+                <path class="icon-line" d="M20 28h12l8 34h34l8-24H38" />
+                <path class="icon-line" d="M44 76h32" />
+                <circle class="icon-fill" cx="48" cy="82" r="5" />
+                <circle class="icon-fill" cx="76" cy="82" r="5" />
+                <path class="icon-line" d="M56 28h24" />
+              </svg>
+              <div class="node-copy">
+                <b>采购</b>
+                <small>要把可谈判空间和业务压力同时压住。</small>
+              </div>
+              <div class="tension-grid">
+                <span class="tension"><em>早</em> 改期谈判</span>
+                <span class="tension"><em>晚</em> 追责催货</span>
+                <span class="tension"><em>多</em> 承诺挤压</span>
+                <span class="tension"><em>少</em> 频繁补单</span>
+              </div>
+            </div>
+            <div class="node supplier">
+              <svg class="role-icon" viewBox="0 0 100 100" aria-hidden="true">
+                <path class="icon-line" d="M18 78h64" />
+                <path class="icon-line" d="M24 78V44l18 10V44l18 10V36h18v42" />
+                <path class="icon-line" d="M66 36V24h12v12" />
+                <path class="icon-line" d="M34 66h6M50 66h6M66 66h6" />
+              </svg>
+              <div class="node-copy">
+                <b>供应商</b>
+                <small>交期变化会打乱产能、备料和批量节奏。</small>
+              </div>
+              <div class="tension-grid">
+                <span class="tension"><em>早</em> 插单赶工</span>
+                <span class="tension"><em>晚</em> 履约风险</span>
+                <span class="tension"><em>多</em> 备货压力</span>
+                <span class="tension"><em>少</em> 批量不稳</span>
+              </div>
+            </div>
+            <div class="node logistics">
+              <svg class="role-icon" viewBox="0 0 100 100" aria-hidden="true">
+                <path class="icon-line" d="M16 36h46v34H16z" />
+                <path class="icon-line" d="M62 48h14l10 12v10H62" />
+                <path class="icon-line" d="M22 70h6M58 70h8" />
+                <circle class="icon-fill" cx="34" cy="76" r="6" />
+                <circle class="icon-fill" cx="72" cy="76" r="6" />
+              </svg>
+              <div class="node-copy">
+                <b>物流</b>
+                <small>日期分布决定零担、合车和路线经济性。</small>
+              </div>
+              <div class="tension-grid">
+                <span class="tension"><em>早</em> 路线打散</span>
+                <span class="tension"><em>晚</em> 紧急运输</span>
+                <span class="tension"><em>多</em> 合车机会</span>
+                <span class="tension"><em>少</em> 零担偏贵</span>
+              </div>
+            </div>
+            <div class="node warehouse">
+              <svg class="role-icon" viewBox="0 0 100 100" aria-hidden="true">
+                <path class="icon-line" d="M16 42l34-18 34 18v36H16z" />
+                <path class="icon-line" d="M28 78V52h44v26" />
+                <path class="icon-line" d="M28 60h44M28 68h44" />
+                <path class="icon-line" d="M42 52v26M58 52v26" />
+              </svg>
+              <div class="node-copy">
+                <b>仓库</b>
+                <small>同一天到货量决定人力、场地和异常压力。</small>
+              </div>
+              <div class="tension-grid">
+                <span class="tension"><em>早</em> 提前占库</span>
+                <span class="tension"><em>晚</em> 断货传导</span>
+                <span class="tension"><em>多</em> 峰值爆仓</span>
+                <span class="tension"><em>少</em> 人力波动</span>
+              </div>
+            </div>
+            <div class="node fulfillment">
+              <svg class="role-icon" viewBox="0 0 100 100" aria-hidden="true">
+                <path class="icon-line" d="M14 64h72l-10 14H26z" />
+                <path class="icon-line" d="M24 64V52h48l10 12" />
+                <path class="icon-line" d="M30 52V38h14v14M44 52V38h14v14M58 52V38h14v14" />
+                <path class="icon-line" d="M36 38V26h14v12M50 38V26h14v12" />
+                <path class="icon-line" d="M22 84c7 4 14 4 21 0 7 4 14 4 21 0 6 3 12 4 18 1" />
+              </svg>
+              <div class="node-copy">
+                <b>计划</b>
+                <small>既要防缺货，也要避免把风险转嫁给执行端。</small>
+              </div>
+              <div class="tension-grid">
+                <span class="tension"><em>早</em> 库存压力</span>
+                <span class="tension"><em>晚</em> 缺货风险</span>
+                <span class="tension"><em>多</em> 周转变慢</span>
+                <span class="tension"><em>少</em> 需求缺口</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen second">
+        <div class="section-title">
+          <h2>从经验协调到成本权衡</h2>
+        </div>
+
+        <div class="model-grid">
+          <aside class="model-panel" aria-label="成本权衡模型">
+            <div>
+              <h3>三类成本</h3>
+              <div class="cost-list">
+                <div class="cost-item">
+                  <div class="cost-icon">01</div>
+                  <div>
+                    <b>缺货应急</b>
+                    <span>晚于需求日期时，业务侧需要承担补救与履约压力。</span>
+                  </div>
+                </div>
+                <div class="cost-item">
+                  <div class="cost-icon">02</div>
+                  <div>
+                    <b>物流合车</b>
+                    <span>同供应商、同区域、同日到货可能降低运输碎片化。</span>
+                  </div>
+                </div>
+                <div class="cost-item">
+                  <div class="cost-icon">03</div>
+                  <div>
+                    <b>仓库负荷</b>
+                    <span>高峰日与非工作日到货会增加现场执行成本。</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rule">在缺货、物流合车与仓库负荷约束内，寻找整体成本更低的日期组合。</div>
+          </aside>
+
+          <section class="demo-panel" aria-label="3D 演示">
+            <div class="demo-head">
+              <h3>3D 演示</h3>
+            </div>
+            <div class="plotly-frame">
+              <iframe src="eta-plotly-preview-embedded.html" title="3D 演示" scrolling="no"></iframe>
+            </div>
+          </section>
+        </div>
+
+        <div class="summary-panel">
+          <div class="summary-main">项目价值在于把多岗位经验里的协调问题，识别成可建模、可计算、可解释的运筹学问题。</div>
+          <div class="summary-note">多次样本测算显示约 6%-13% 的理论优化空间；该数字用于刻画模型空间，业务兑现仍需后续实际验证。</div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

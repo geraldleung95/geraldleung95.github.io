@@ -1,0 +1,286 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500" role="img" aria-labelledby="title desc">
+  <title id="title">预计到货日期优化封面抽象图</title>
+  <desc id="desc">中心日历节点连接采购、供应商、物流、仓库和计划五个角色图标，表示预计到货时间牵动多方成本与履约约束。</desc>
+
+  <style>
+    :root {
+      --ink: #121119;
+      --paper: #f5f2ff;
+      --lavender: #b091f3;
+      --pink: #ff89c2;
+      --orange: #ffa95c;
+      --blue: #5797ff;
+      --lime: #cef26a;
+      --red: #ee3d4d;
+    }
+
+    .role,
+    .hub {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .hub {
+      animation: hub-breath 5.8s ease-in-out infinite;
+    }
+
+    .purchase { animation: float-a 8s ease-in-out infinite; }
+    .supplier { animation: float-b 8.8s ease-in-out infinite; }
+    .logistics { animation: float-c 7.6s ease-in-out infinite; }
+    .warehouse { animation: float-d 9.2s ease-in-out infinite; }
+    .planning { animation: float-e 8.4s ease-in-out infinite; }
+
+    .link {
+      fill: none;
+      stroke: rgba(245, 242, 255, 0.17);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-dasharray: 5 14;
+      animation: dash-flow 7s linear infinite;
+    }
+
+    .link.accent {
+      stroke: rgba(206, 242, 106, 0.28);
+    }
+
+    .icon-line {
+      fill: none;
+      stroke-width: 5.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-fill {
+      stroke-width: 5.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-box {
+      fill: rgba(18, 17, 25, 0.36);
+      stroke-width: 1.8;
+      rx: 16;
+    }
+
+    .question {
+      animation: question-pulse 2.6s ease-out infinite;
+    }
+
+    @keyframes hub-breath {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.035); }
+    }
+
+    @keyframes float-a {
+      0%, 100% { transform: translate(0, 0) rotate(-3deg); }
+      45% { transform: translate(10px, -8px) rotate(1deg); }
+    }
+
+    @keyframes float-b {
+      0%, 100% { transform: translate(0, 0) rotate(2deg); }
+      45% { transform: translate(-10px, 9px) rotate(-2deg); }
+    }
+
+    @keyframes float-c {
+      0%, 100% { transform: translate(0, 0) rotate(-2deg); }
+      45% { transform: translate(9px, 7px) rotate(2deg); }
+    }
+
+    @keyframes float-d {
+      0%, 100% { transform: translate(0, 0) rotate(2deg); }
+      45% { transform: translate(-9px, -8px) rotate(-1deg); }
+    }
+
+    @keyframes float-e {
+      0%, 100% { transform: translate(0, 0) rotate(-2deg); }
+      45% { transform: translate(11px, 8px) rotate(2deg); }
+    }
+
+    @keyframes dash-flow {
+      to { stroke-dashoffset: -76; }
+    }
+
+    @keyframes question-pulse {
+      0%, 100% { opacity: 1; }
+      55% { opacity: 0.82; }
+    }
+  </style>
+
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#b091f3" stop-opacity="0.11" />
+      <stop offset="42%" stop-color="#5797ff" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#121119" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="hubFill" cx="34%" cy="28%" r="72%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.36" />
+      <stop offset="48%" stop-color="#fff" stop-opacity="0.14" />
+      <stop offset="100%" stop-color="#fff" stop-opacity="0.08" />
+    </radialGradient>
+
+    <radialGradient id="pinkFill" cx="34%" cy="28%" r="78%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.12" />
+      <stop offset="50%" stop-color="#ff89c2" stop-opacity="0.17" />
+      <stop offset="100%" stop-color="#121119" stop-opacity="0.78" />
+    </radialGradient>
+
+    <radialGradient id="orangeFill" cx="34%" cy="28%" r="78%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.12" />
+      <stop offset="50%" stop-color="#ffa95c" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="#121119" stop-opacity="0.78" />
+    </radialGradient>
+
+    <radialGradient id="blueFill" cx="34%" cy="28%" r="78%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.12" />
+      <stop offset="50%" stop-color="#5797ff" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="#121119" stop-opacity="0.78" />
+    </radialGradient>
+
+    <radialGradient id="limeFill" cx="34%" cy="28%" r="78%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.12" />
+      <stop offset="50%" stop-color="#cef26a" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#121119" stop-opacity="0.78" />
+    </radialGradient>
+
+    <radialGradient id="lavenderFill" cx="34%" cy="28%" r="78%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.12" />
+      <stop offset="50%" stop-color="#b091f3" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="#121119" stop-opacity="0.78" />
+    </radialGradient>
+
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000" flood-opacity="0.38" />
+    </filter>
+
+    <filter id="iconGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.48" />
+      <feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#fff" flood-opacity="0.12" />
+    </filter>
+
+    <g id="icon-purchase">
+      <path class="icon-line" d="M20 28h12l8 34h34l8-24H38" />
+      <path class="icon-line" d="M44 76h32" />
+      <circle class="icon-fill" cx="48" cy="82" r="5" />
+      <circle class="icon-fill" cx="76" cy="82" r="5" />
+      <path class="icon-line" d="M56 28h24" />
+    </g>
+
+    <g id="icon-supplier">
+      <path class="icon-line" d="M18 78h64" />
+      <path class="icon-line" d="M24 78V44l18 10V44l18 10V36h18v42" />
+      <path class="icon-line" d="M66 36V24h12v12" />
+      <path class="icon-line" d="M34 66h6M50 66h6M66 66h6" />
+    </g>
+
+    <g id="icon-logistics">
+      <path class="icon-line" d="M16 36h46v34H16z" />
+      <path class="icon-line" d="M62 48h14l10 12v10H62" />
+      <path class="icon-line" d="M22 70h6M58 70h8" />
+      <circle class="icon-fill" cx="34" cy="76" r="6" />
+      <circle class="icon-fill" cx="72" cy="76" r="6" />
+    </g>
+
+    <g id="icon-warehouse">
+      <path class="icon-line" d="M16 42l34-18 34 18v36H16z" />
+      <path class="icon-line" d="M28 78V52h44v26" />
+      <path class="icon-line" d="M28 60h44M28 68h44" />
+      <path class="icon-line" d="M42 52v26M58 52v26" />
+    </g>
+
+    <g id="icon-ship">
+      <path class="icon-line" d="M14 64h72l-10 14H26z" />
+      <path class="icon-line" d="M24 64V52h48l10 12" />
+      <path class="icon-line" d="M30 52V38h14v14M44 52V38h14v14M58 52V38h14v14" />
+      <path class="icon-line" d="M36 38V26h14v12M50 38V26h14v12" />
+      <path class="icon-line" d="M22 84c7 4 14 4 21 0 7 4 14 4 21 0 6 3 12 4 18 1" />
+    </g>
+
+    <g id="icon-calendar">
+      <path class="icon-fill" d="M22 26h56a8 8 0 0 1 8 8v42a8 8 0 0 1-8 8H22a8 8 0 0 1-8-8V34a8 8 0 0 1 8-8z" />
+      <path class="icon-line" d="M14 44h72" />
+      <path class="icon-line" d="M32 16v18M68 16v18" />
+      <path class="icon-line" d="M32 58h6M48 58h6M64 58h6M32 72h6M48 72h6M64 72h6" />
+    </g>
+
+    <g id="question">
+      <circle cx="0" cy="0" r="17" fill="#ee3d4d" stroke="rgba(255,255,255,.82)" stroke-width="3" />
+      <text x="0" y="7" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="800" fill="#fff">?</text>
+    </g>
+  </defs>
+
+  <rect width="1024" height="500" fill="#121119" />
+  <rect width="1024" height="500" fill="url(#bgGlow)" />
+  <circle cx="512" cy="250" r="230" fill="#b091f3" opacity="0.025" />
+  <circle cx="742" cy="250" r="210" fill="#5797ff" opacity="0.024" />
+
+  <g>
+    <path class="link" d="M512 250 C430 210 340 160 276 118" />
+    <path class="link" d="M512 250 C582 198 662 142 736 104" />
+    <path class="link accent" d="M512 250 C614 248 736 252 830 250" />
+    <path class="link" d="M512 250 C578 312 620 350 675 385" />
+    <path class="link accent" d="M512 250 C442 322 382 362 314 392" />
+  </g>
+
+  <g class="hub" filter="url(#softShadow)">
+    <path d="M512 166 C570 166 608 200 608 250 C608 306 572 338 512 338 C452 338 416 306 416 250 C416 201 452 166 512 166Z" fill="url(#hubFill)" stroke="rgba(255,255,255,.86)" stroke-width="1.8" />
+    <g transform="translate(512 252) scale(.68) translate(-50 -50)" stroke="#fff" filter="url(#iconGlow)">
+      <use href="#icon-calendar" />
+    </g>
+  </g>
+
+  <g class="role purchase" filter="url(#softShadow)">
+    <path d="M146 106 C158 60 246 54 308 73 C351 87 368 126 338 158 C304 196 202 190 158 161 C138 148 137 126 146 106Z" fill="url(#pinkFill)" stroke="#ff89c2" stroke-opacity=".66" stroke-width="1.8" />
+    <rect class="icon-box" x="210" y="84" width="64" height="64" rx="16" stroke="#ff89c2" />
+    <g transform="translate(242 118) scale(.48) translate(-50 -50)" stroke="#ff89c2" fill="rgba(255,137,194,.28)">
+      <use href="#icon-purchase" />
+    </g>
+    <g class="question" transform="translate(338 76)">
+      <use href="#question" />
+    </g>
+  </g>
+
+  <g class="role supplier" filter="url(#softShadow)">
+    <path d="M666 82 C700 44 797 49 842 79 C877 103 872 148 834 173 C786 204 681 194 645 160 C617 133 633 95 666 82Z" fill="url(#orangeFill)" stroke="#ffa95c" stroke-opacity=".62" stroke-width="1.8" />
+    <rect class="icon-box" x="714" y="92" width="64" height="64" rx="16" stroke="#ffa95c" />
+    <g transform="translate(746 126) scale(.48) translate(-50 -50)" stroke="#ffa95c" fill="rgba(255,169,92,.28)">
+      <use href="#icon-supplier" />
+    </g>
+    <g class="question" transform="translate(846 74)">
+      <use href="#question" />
+    </g>
+  </g>
+
+  <g class="role logistics" filter="url(#softShadow)">
+    <path d="M792 222 C834 193 919 205 952 239 C980 268 964 312 919 328 C865 348 780 331 759 293 C744 264 759 236 792 222Z" fill="url(#blueFill)" stroke="#5797ff" stroke-opacity=".66" stroke-width="1.8" />
+    <rect class="icon-box" x="822" y="242" width="64" height="64" rx="16" stroke="#5797ff" />
+    <g transform="translate(854 276) scale(.5) translate(-50 -50)" stroke="#5797ff" fill="rgba(87,151,255,.28)">
+      <use href="#icon-logistics" />
+    </g>
+    <g class="question" transform="translate(938 224)">
+      <use href="#question" />
+    </g>
+  </g>
+
+  <g class="role warehouse" filter="url(#softShadow)">
+    <path d="M635 363 C672 331 766 338 805 369 C836 395 824 437 780 456 C722 480 629 463 604 423 C589 399 605 377 635 363Z" fill="url(#limeFill)" stroke="#cef26a" stroke-opacity=".6" stroke-width="1.8" />
+    <rect class="icon-box" x="682" y="382" width="64" height="64" rx="16" stroke="#cef26a" />
+    <g transform="translate(714 415) scale(.48) translate(-50 -50)" stroke="#cef26a" fill="rgba(206,242,106,.28)">
+      <use href="#icon-warehouse" />
+    </g>
+    <g class="question" transform="translate(812 366)">
+      <use href="#question" />
+    </g>
+  </g>
+
+  <g class="role planning" filter="url(#softShadow)">
+    <path d="M164 355 C208 324 304 331 338 361 C367 387 351 430 306 447 C252 466 161 455 128 419 C103 392 125 369 164 355Z" fill="url(#lavenderFill)" stroke="#b091f3" stroke-opacity=".66" stroke-width="1.8" />
+    <rect class="icon-box" x="203" y="376" width="64" height="64" rx="16" stroke="#b091f3" />
+    <g transform="translate(235 408) scale(.48) translate(-50 -50)" stroke="#b091f3" fill="rgba(176,145,243,.28)">
+      <use href="#icon-ship" />
+    </g>
+    <g class="question" transform="translate(342 350)">
+      <use href="#question" />
+    </g>
+  </g>
+</svg>
